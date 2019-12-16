@@ -1,0 +1,13 @@
+.exercise-atlas {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 80px;
+}
+
+.atlas-menu {
+    width: 60%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
