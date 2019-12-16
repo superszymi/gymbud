@@ -28,6 +28,11 @@ const chosenExercisesReducer = (state = INITIAL_STATE, action) => {
                 ...state,
                 exercises: removeExerciseSetFromChosenExercises(state.exercises, action.payload)
             }
+        case ChosenExercisesActionTypes.CLEAR_WORKOUT:
+            return {
+                ...state,
+                exercises: []
+            }
         default:
             return state;
     }

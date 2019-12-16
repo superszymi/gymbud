@@ -19,6 +19,34 @@
                 width: 20%;
             }
         }
+    }
 
+    .total {
+        width: 50%;
+        display: flex;
+        justify-content: space-between;
+        margin: 30px 0;
+        font-size: 20px;
+    }
+
+    .actions {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+
+        .action {
+            width: 30%;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+
+            span {
+                margin: 5px;
+            }
+
+            CustomButton {
+                min-width: 90%;
+            }
+        }
     }
 }

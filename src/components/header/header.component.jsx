@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { ReactComponent as Logo } from '../../assets/muscles.svg';
@@ -9,31 +9,38 @@ import ChosenExercisesDropdown from '../chosen-exercises-dropdown/chosen-exercis
 
 import './header.styles.scss';
 
-const Header = ({ currentUser, hidden }) => (
+const Header = ({ currentUser, hidden, location }) => (
     <div className='header'>
         <Link className='logo-container' to='/'>
             <Logo className='logo'/>
         </Link>
         <div className='options'>
-            <Link className='option' to='/dashboard'>
-                DASHBOARD
-            </Link>
-            <Link className='option' to='/workouts'>
-                WORKOUTS
-            </Link>
-            <Link className='option' to='/new-workout'>
-                NEW WORKOUT
-            </Link>
-            <Link className='option' to='/start-workout'>
-                START WORKOUT
-            </Link>
+            { currentUser ? (
+                <div className='logged-in'>
+                    <Link className='option' to='/dashboard'>
+                        DASHBOARD
+                    </Link>
+                    <Link className='option' to='/workouts'>
+                        WORKOUTS
+                    </Link>
+                    <Link className='option' to='/atlas'>
+                        NEW WORKOUT
+                    </Link>
+                    <Link className='option' to='/start-workout'>
+                        START WORKOUT
+                    </Link>
+                    {
+                        location.pathname.includes('atlas') ? <ChosenExercisesIcon /> : null
+                    }
+                </div>
+            ) : null
+            }
             {
                 currentUser ? 
                 <div className='option' onClick={() => auth.signOut()}>SIGN OUT</div>
                 :
                 <Link className='option' to='/sign-in'>SIGN IN</Link>
             }
-            <ChosenExercisesIcon />
         </div>
         {
             hidden ? null : (<ChosenExercisesDropdown />)
@@ -46,4 +53,4 @@ const mapStateToProps = ({ user: { currentUser }, chosenExercises: { hidden } })
     hidden
 })
 
-export default connect(mapStateToProps)(Header);
+export default withRouter(connect(mapStateToProps)(Header));

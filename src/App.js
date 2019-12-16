@@ -12,6 +12,7 @@ import SignInSignUpPage from './pages/sign-in-sign-up/sign-in-sign-up.component'
 import WorkoutCreatedPage from './pages/workout-created/workout-created.component';
 
 import { auth, createUserProfileDocument } from './firebase/firebase.utils';
+import StartWorkoutPage from './pages/start-workout/start-workout.component';
 
 class App extends React.Component {
 
@@ -46,6 +47,7 @@ class App extends React.Component {
           <Route path='/atlas' component={ExerciseAtlasPage} />
           <Route exact path='/sign-in' render={() => this.props.currentUser ? (<Redirect to='/' />) : (<SignInSignUpPage />)} />
           <Route exact path='/workout-created' component={WorkoutCreatedPage} />
+          <Route exact path='/start-workout/:workoutName*' component={StartWorkoutPage} />
         </Switch>
       </div>
     );

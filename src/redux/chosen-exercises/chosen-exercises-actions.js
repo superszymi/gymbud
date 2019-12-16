@@ -18,3 +18,7 @@ export const removeExerciseSet = exercise => ({
     type: ChosenExercisesActionTypes.REMOVE_EXERCISE_SET,
     payload: exercise
 })
+
+export const clearWorkout = () => ({
+    type: ChosenExercisesActionTypes.CLEAR_WORKOUT
+})

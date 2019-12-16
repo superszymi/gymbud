@@ -6,7 +6,6 @@ const INITIAL_STATE = {
             linkUrl: 'chest',
             exercises: [
                 {
-                    id: 1,
                     name: 'bench press',
                     difficulty: 'beginner'
                 }
@@ -18,7 +17,6 @@ const INITIAL_STATE = {
             linkUrl: 'back',
             exercises: [
                 {
-                    id: 1,
                     name: 'pull-ups',
                     difficulty: 'beginner'
                 }
@@ -27,37 +25,44 @@ const INITIAL_STATE = {
         {
             title: 'legs',
             id: 3,
-            linkUrl: 'legs'
+            linkUrl: 'legs',
+            exercises: []
         },
         {
             title: 'shoulders',
             id: 4,
-            linkUrl: 'shoulders'
+            linkUrl: 'shoulders',
+            exercises: []
         },
         {
             title: 'biceps',
             id: 5,
-            linkUrl: 'biceps'
+            linkUrl: 'biceps',
+            exercises: []
         },
         {
             title: 'triceps',
             id: 6,
-            linkUrl: 'triceps'
+            linkUrl: 'triceps',
+            exercises: []
         },
         {
             title: 'abs',
             id: 7,
-            linkUrl: 'abs'
+            linkUrl: 'abs',
+            exercises: []
         },
         {
             title: 'full body',
             id: 8,
-            linkUrl: 'full body'
+            linkUrl: 'full body',
+            exercises: []
         },
         {
             title: 'aerobic',
             id: 9,
-            linkUrl: 'aerobic'
+            linkUrl: 'aerobic',
+            exercises: []
         }
     ]
 }

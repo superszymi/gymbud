@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { compose } from 'redux';
 
 import CustomButton from '../custom-button/custom-button.component';
 import ChosenExerciseItem from '../chosen-exercise-item/chosen-exercise-item.component';
@@ -29,4 +30,7 @@ const ChosenExercisesDropdown = ({ exercises, history, dispatch }) => (
     exercises
 })
 
-export default withRouter(connect(mapStateToProps)(ChosenExercisesDropdown));
+export default compose(
+    withRouter,
+    connect(mapStateToProps)
+    )(ChosenExercisesDropdown);
