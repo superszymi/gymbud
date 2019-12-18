@@ -47,15 +47,17 @@ const config = {
   export const addCollectionAndDocuments = (collectionKey, objects) => {
     const collectionRef = firestore.collection(collectionKey);
     const batch = firestore.batch();
+
     objects.forEach(obj => {
       const newDocRef = collectionRef.doc();
       batch.set(newDocRef, obj);
     });
+
     batch.commit();
   }
 
-  export const convertCollectionsSnapshotToMap = (collections) => {
-    const transformedCollection = collections.docs.map(doc => {
+  export const convertAtlasSnapshotToMap = (atlas) => {
+    const transformedAtlas = atlas.docs.map(doc => {
         const { title, exercises } = doc.data();
         return {
             routeName: encodeURI(title.toLowerCase()),
@@ -64,7 +66,25 @@ const config = {
             exercises
         };
     });
-    console.log(transformedCollection);
+    return transformedAtlas.reduce((accumulator, category) => {
+      accumulator[category.title.toLowerCase()] = category;
+      return accumulator;
+    }, {});
+  }
+
+  export const convertTemplatesSnapshotToMap = (templates) => {
+    const transformedTemplates = templates.docs.map(doc => {
+      const { workoutName, exercises } = doc.data();
+      return {
+        id: doc.id,
+        workoutName,
+        exercises
+      };
+    });
+    return transformedTemplates.reduce((accumulator, template) => {
+      accumulator[template.workoutName.toLowerCase()] = template;
+      return accumulator;
+    }, {});
   }
 
   firebase.initializeApp(config);

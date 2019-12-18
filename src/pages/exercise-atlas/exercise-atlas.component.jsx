@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
 
-import { firestore, convertCollectionsSnapshotToMap } from '../../firebase/firebase.utils';
+import { firestore, convertAtlasSnapshotToMap } from '../../firebase/firebase.utils';
+import { updateAtlas } from '../../redux/atlas/atlas-actions';
 
 import './exercise-atlas.styles.scss';
 import AtlasOverview from '../../components/atlas-overview/atlas-overview.component';
@@ -13,9 +14,11 @@ class ExerciseAtlasPage extends React.Component {
     unsubscribeFromSnapshot = null;
 
     componentDidMount() {
+        const { updateAtlas } = this.props;
         const collectionRef = firestore.collection('atlas');
-        collectionRef.onSnapshot(async snapshot => {
-            convertCollectionsSnapshotToMap(snapshot);
+        this.unsubscribeFromSnapshot = collectionRef.get().then(snapshot => {
+            const collectionMap = convertAtlasSnapshotToMap(snapshot);
+            updateAtlas(collectionMap);
         })
     }
 
@@ -30,8 +33,9 @@ class ExerciseAtlasPage extends React.Component {
     }
 }
 
-const mapStateToProps = ({ atlas: { categories } }) => ({
-    categories
+const mapDispatchToProps = dispatch => ({
+    updateAtlas: collectionMap => dispatch(updateAtlas(collectionMap))
 })
 
-export default connect(mapStateToProps)(ExerciseAtlasPage);
+
+export default connect(null, mapDispatchToProps)(ExerciseAtlasPage);

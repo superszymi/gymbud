@@ -6,7 +6,7 @@ import AtlasCategoryItem from '../atlas-category-item/atlas-category-item.compon
 import './atlas-overview.styles.scss';
 
 const AtlasOverview = ({ categories }) => (
-    <div className='category-overview'>
+    <div className='atlas-overview'>
         {
             categories.map(({ id, ...otherProps }) => (
                 <AtlasCategoryItem key={id} {...otherProps} />
@@ -15,8 +15,8 @@ const AtlasOverview = ({ categories }) => (
     </div>
 )
 
-const mapStateToProps = state => ({
-    categories: state.atlas.categories
+const mapStateToProps = ({ atlas: { categories }}) => ({
+    categories: categories ? Object.keys(categories).map(key => categories[key]) : []
 })
 
 export default connect(mapStateToProps)(AtlasOverview);

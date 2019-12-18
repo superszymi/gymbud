@@ -51,7 +51,7 @@ class WorkoutCreatedPage extends React.Component {
         const { userId, chosenExercises } = this.props;
         const { workoutName } = this.state;
 
-        const exercises = chosenExercises.map(({name, sets}) => ({name, sets}));
+        const exercises = chosenExercises.map(({name, sets, id}) => ({name, sets, id}));
         const user = firestore.doc(`/users/${userId}`)
 
         addDocumentToCollection('workoutTemplates', { workoutName, user, exercises });

@@ -14,7 +14,7 @@ const ChosenExercisesDropdown = ({ exercises, history, dispatch }) => (
         <div className='exercises'>
             {
                 exercises.length ? 
-                exercises.map(exercise => <ChosenExerciseItem key={exercise.id} exercise={exercise} />)
+                exercises.map((exercise) => <ChosenExerciseItem key={exercise.id} exercise={exercise} />)
                 : <span>Add exercises from atlas</span>
             }
         </div>

@@ -47,7 +47,7 @@ class App extends React.Component {
           <Route path='/atlas' component={ExerciseAtlasPage} />
           <Route exact path='/sign-in' render={() => this.props.currentUser ? (<Redirect to='/' />) : (<SignInSignUpPage />)} />
           <Route exact path='/workout-created' component={WorkoutCreatedPage} />
-          <Route exact path='/start-workout/:workoutName*' component={StartWorkoutPage} />
+          <Route path='/start-workout' component={StartWorkoutPage} currentUser={this.props.currentUser}/>
         </Switch>
       </div>
     );
