@@ -5,11 +5,13 @@ import chosenExercisesReducer from './chosen-exercises/chosen-exercises-reducer'
 import atlasReducer from './atlas/atlas-reducer';
 import workoutTemplatesReducer from './workout-templates/workout-templates-reducer';
 import currentWorkoutReducer from './current-workout/current-workout-reducer';
- 
+import workoutsReducer from './workouts/workouts-reducer'; 
+
 export default combineReducers({
     user: userReducer,
     chosenExercises: chosenExercisesReducer,
     atlas: atlasReducer,
     workoutTemplates: workoutTemplatesReducer,
-    currentWorkout: currentWorkoutReducer
+    currentWorkout: currentWorkoutReducer,
+    workouts: workoutsReducer
 });

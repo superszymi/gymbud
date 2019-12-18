@@ -9,7 +9,7 @@ import ChosenExercisesDropdown from '../chosen-exercises-dropdown/chosen-exercis
 
 import './header.styles.scss';
 
-const Header = ({ currentUser, hidden, location }) => (
+const Header = ({ currentUser, hidden, location, history }) => (
     <div className='header'>
         <Link className='logo-container' to='/'>
             <Logo className='logo'/>
@@ -37,7 +37,7 @@ const Header = ({ currentUser, hidden, location }) => (
             }
             {
                 currentUser ? 
-                <div className='option' onClick={() => auth.signOut()}>SIGN OUT</div>
+                <div className='option' onClick={async () =>  {await auth.signOut(); history.push('/');}}>SIGN OUT</div>
                 :
                 <Link className='option' to='/sign-in'>SIGN IN</Link>
             }

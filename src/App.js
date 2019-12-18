@@ -7,12 +7,15 @@ import './App.css';
 import { setCurrentUser } from './redux/user/user-actions';
 
 import Header from './components/header/header.component';
+import Homepage from './pages/homepage/homepage.component';
 import ExerciseAtlasPage from './pages/exercise-atlas/exercise-atlas.component';
 import SignInSignUpPage from './pages/sign-in-sign-up/sign-in-sign-up.component';
 import WorkoutCreatedPage from './pages/workout-created/workout-created.component';
 
 import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 import StartWorkoutPage from './pages/start-workout/start-workout.component';
+import DashboardPage from './pages/dashboard/dashboard.component';
+import WorkoutsPage from './pages/workouts/workouts-component';
 
 class App extends React.Component {
 
@@ -44,10 +47,13 @@ class App extends React.Component {
       <div>
         <Header />
         <Switch>
+          <Route exact path='/' render={() => this.props.currentUser ? (<Redirect to='/dashboard' />) : (<Homepage />)} /> 
+          <Route exact path='/dashboard' component={DashboardPage} />
           <Route path='/atlas' component={ExerciseAtlasPage} />
-          <Route exact path='/sign-in' render={() => this.props.currentUser ? (<Redirect to='/' />) : (<SignInSignUpPage />)} />
+          <Route exact path='/sign-in' render={() => this.props.currentUser ? (<Redirect to='/dashboard' />) : (<SignInSignUpPage />)} />
           <Route exact path='/workout-created' component={WorkoutCreatedPage} />
-          <Route path='/start-workout' component={StartWorkoutPage} currentUser={this.props.currentUser}/>
+          <Route path='/start-workout' component={StartWorkoutPage} />
+          <Route exact path='/workouts' component={WorkoutsPage} />
         </Switch>
       </div>
     );

@@ -5,6 +5,7 @@ import update from 'immutability-helper';
 
 import CurrentWorkoutExercise from '../current-workout-exercise/current-workout-exercise.component';
 import CustomButton from '../custom-button/custom-button.component';
+import WorkoutCompleted from '../workout-completed/workout-completed.component';
 
 import { firestore, addDocumentToCollection } from '../../firebase/firebase.utils';
 import { updateCurrentWorkout } from '../../redux/current-workout/curent-workout-actions';
@@ -17,36 +18,42 @@ class WorkoutInProgress extends React.Component {
         super();
 
         this.state = {
-            workout: null
+            workout: null,
+            completed: false
         }
     }
 
-    componentDidMount() {
-        const { workoutTemplate: { workoutName, exercises }, updateCurrentWorkout, currentUser } = this.props;
-        const workoutToAdd = {
-            name: workoutName,
-            exercises: exercises.map(exercise => exercise = {
-                id: exercise.id,
-                name: exercise.name,
-                sets: exercise.sets ? new Array(exercise.sets).fill(0).map(() => ({
-                    reps: '',
-                    weight: ''
-                })) : null 
-            }),
-            date: new Date().toLocaleString(),
-            time: Date.now(),
-            user: firestore.doc(`/users/${currentUser.id}`)
+    static getDerivedStateFromProps(props) {
+        if(props.workoutTemplate && props.currentUser && props.updateCurrentWorkout) {
+            const { workoutTemplate: { workoutName, exercises }, updateCurrentWorkout, currentUser } = props;
+
+            const workoutToAdd = {
+                name: workoutName,
+                exercises: exercises.map(exercise => exercise = {
+                    id: exercise.id,
+                    name: exercise.name,
+                    sets: exercise.sets ? new Array(exercise.sets).fill(0).map(() => ({
+                        reps: '',
+                        weight: ''
+                    })) : null 
+                }),
+                date: new Date().toLocaleString(),
+                time: Date.now(),
+                user: firestore.doc(`/users/${currentUser.id}`)
+            }
+            updateCurrentWorkout(workoutToAdd);
+            return {
+                workout: workoutToAdd
+            }
         }
-        this.setState({
-            workout: workoutToAdd
-        })
-        updateCurrentWorkout(workoutToAdd);
+        return null;
     }
 
-    saveWorkout = () => {
+    completeWorkout = () => {
         const { workout } = this.state;
         this.setState({
-            workout: update(workout, {time: {$set: (Date.now() - workout.time)/60000}}) //Date in minutes, change that to timer later
+            workout: update(workout, {time: {$set: (Date.now() - workout.time)/60000}}), //Date in minutes, change that to timer later
+            completed: true
         }, () => {
             addDocumentToCollection('workouts', workout);
             updateCurrentWorkout(workout);
@@ -63,14 +70,17 @@ class WorkoutInProgress extends React.Component {
     }
 
     render() {
-        const { workout } = this.state;
+        const { workout, completed } = this.state;
         return (
             <div>
                 <h1>{workout ? workout.name : '...'}</h1>
                 {
                     workout ? workout.exercises.map(({ id, ...otherProps }) => <CurrentWorkoutExercise key={id} id={id} onChange={this.handleExerciseChange} {...otherProps} />) : '...'
                 }
-                <CustomButton onClick={this.saveWorkout} >DONE</CustomButton>
+                <CustomButton onClick={this.completeWorkout} >DONE</CustomButton>
+                {
+                    completed ? <WorkoutCompleted workout={workout} /> : null
+                }
             </div>
         )
     }

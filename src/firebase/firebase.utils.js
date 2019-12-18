@@ -82,7 +82,24 @@ const config = {
       };
     });
     return transformedTemplates.reduce((accumulator, template) => {
-      accumulator[template.workoutName.toLowerCase()] = template;
+      accumulator[template.id] = template;
+      return accumulator;
+    }, {});
+  }
+
+  export const convertWorkoutsSnapshotToMap = workouts => {
+    const transformedWorkouts = workouts.docs.map(doc => {
+      const { name, date, time, exercises } = doc.data();
+      return {
+        id: doc.id,
+        workoutName: name,
+        date: date,
+        time: time,
+        exercises: exercises
+      };
+    });
+    return transformedWorkouts.reduce((accumulator, workout) => {
+      accumulator[workout.id] = workout;
       return accumulator;
     }, {});
   }

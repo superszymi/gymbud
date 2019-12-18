@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Route } from 'react-router-dom';
+import { Route, withRouter } from 'react-router-dom';
 
 import { firestore, convertTemplatesSnapshotToMap } from '../../firebase/firebase.utils';
 import { updateTemplates } from '../../redux/workout-templates/workout-templates-actions';
@@ -15,12 +15,22 @@ class StartWorkoutPage extends React.Component {
     unsubscribeFromSnapshot = null;
 
     componentDidMount() {
+        this.update();
+    }
+
+    componentDidUpdate() {
+        this.update();
+    }
+
+    update() {
+        if(!this.props.currentUser || !this.props.updateTemplates) return null;
+
         const { updateTemplates, currentUser } = this.props;
         const templatesRef = firestore.collection('workoutTemplates').where('user', '==', firestore.doc(`/users/${currentUser.id}`));
         this.unsubscribeFromSnapshot = templatesRef.get().then(snapshot => {
             const templatesMap = convertTemplatesSnapshotToMap(snapshot);
             updateTemplates(templatesMap);
-        })
+        });
     }
 
     render() {
@@ -42,4 +52,4 @@ const mapStateToProps = ({ user: { currentUser } }) => ({
     currentUser
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(StartWorkoutPage);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(StartWorkoutPage));
