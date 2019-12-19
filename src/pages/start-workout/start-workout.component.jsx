@@ -36,9 +36,9 @@ class StartWorkoutPage extends React.Component {
     render() {
         const { match } = this.props;
         return (
-            <div>
-                <Route exact path={`${match.url}`} component={StartWorkoutOverview} />
-                <Route path={`${match.url}/:templateName`} component={WorkoutInProgress} />
+            <div className='start-workout'>
+                <Route exact path={`${match.path}`} component={StartWorkoutOverview} />
+                <Route exact path={`${match.path}/:templateName`} component={WorkoutInProgress} />
             </div>
         )
     }

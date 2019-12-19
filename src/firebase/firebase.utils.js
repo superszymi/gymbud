@@ -32,6 +32,17 @@ const config = {
     return userRef;
   }
 
+  export const updateDocumentInCollection = async (collectionKey, objectToUpdate) => {
+    const collectionRef = firestore.collection(collectionKey);
+    const docRef = collectionRef.doc(objectToUpdate.id);
+
+    try {
+      await docRef.set(objectToUpdate);
+    } catch(error) {
+      console.log(error);
+    }
+  }
+
   export const addDocumentToCollection = async (collectionKey, objectsToAdd) => {
         const collectionRef = firestore.collection(collectionKey);
 
@@ -89,13 +100,14 @@ const config = {
 
   export const convertWorkoutsSnapshotToMap = workouts => {
     const transformedWorkouts = workouts.docs.map(doc => {
-      const { name, date, time, exercises } = doc.data();
+      const { workoutName, date, time, exercises, user } = doc.data();
       return {
         id: doc.id,
-        workoutName: name,
+        workoutName: workoutName,
         date: date,
         time: time,
-        exercises: exercises
+        exercises: exercises,
+        user: user
       };
     });
     return transformedWorkouts.reduce((accumulator, workout) => {

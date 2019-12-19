@@ -15,7 +15,7 @@ import WorkoutCreatedPage from './pages/workout-created/workout-created.componen
 import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 import StartWorkoutPage from './pages/start-workout/start-workout.component';
 import DashboardPage from './pages/dashboard/dashboard.component';
-import WorkoutsPage from './pages/workouts/workouts-component';
+import WorkoutsPage from './pages/workouts/workouts.component';
 
 class App extends React.Component {
 
@@ -51,9 +51,9 @@ class App extends React.Component {
           <Route exact path='/dashboard' component={DashboardPage} />
           <Route path='/atlas' component={ExerciseAtlasPage} />
           <Route exact path='/sign-in' render={() => this.props.currentUser ? (<Redirect to='/dashboard' />) : (<SignInSignUpPage />)} />
-          <Route exact path='/workout-created' component={WorkoutCreatedPage} />
+          <Route exact path='/new-template' component={WorkoutCreatedPage} />
           <Route path='/start-workout' component={StartWorkoutPage} />
-          <Route exact path='/workouts' component={WorkoutsPage} />
+          <Route path='/workouts' component={WorkoutsPage} />
         </Switch>
       </div>
     );

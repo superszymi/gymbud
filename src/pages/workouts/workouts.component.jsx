@@ -1,12 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Route } from 'react-router-dom';
 
 import WorkoutList from '../../components/workout-list/workout-list.component';
+import WorkoutDetails from '../../components/workout-details/workout-details.component';
 
 import { firestore, convertWorkoutsSnapshotToMap } from '../../firebase/firebase.utils';
 import { updateWorkouts } from '../../redux/workouts/workouts-actions';
 
 import './workouts.styles.scss';
+
 
 class WorkoutsPage extends React.Component {
 
@@ -32,11 +35,13 @@ class WorkoutsPage extends React.Component {
     }
 
     render() {
+        const { match } = this.props;
         return(
             <div className='workouts'>
-                <WorkoutList />
+                <Route exact path={`${match.url}`} component={WorkoutList} />
+                <Route exact path={`${match.url}/:workoutId`} component={WorkoutDetails} />
             </div>
-        )
+        );
     }
 }
 

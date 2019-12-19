@@ -6,7 +6,7 @@ import StartWorkoutItem from '../start-workout-item/start-workout-item.component
 import './start-workout-overview.styles.scss';
 
 const StartWorkoutOverview = ({ workoutTemplates }) => (
-    <div>
+    <div className='start-workout-overview'>
         {
             workoutTemplates ? workoutTemplates.map(({ id, ...otherProps }) => <StartWorkoutItem key={id} {...otherProps} />) : '...'
         }

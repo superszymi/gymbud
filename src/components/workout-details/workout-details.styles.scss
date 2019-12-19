@@ -1,0 +1,13 @@
+.workout-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+    .actions {
+
+        .custom-button {
+            margin: 0 10px;
+        }
+    }
+}

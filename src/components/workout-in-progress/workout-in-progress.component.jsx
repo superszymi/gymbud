@@ -8,7 +8,7 @@ import CustomButton from '../custom-button/custom-button.component';
 import WorkoutCompleted from '../workout-completed/workout-completed.component';
 
 import { firestore, addDocumentToCollection } from '../../firebase/firebase.utils';
-import { updateCurrentWorkout } from '../../redux/current-workout/curent-workout-actions';
+import { updateCurrentWorkout } from '../../redux/current-workout/current-workout-actions';
 
 import './workout-in-progress.styles.scss';
 
@@ -23,8 +23,8 @@ class WorkoutInProgress extends React.Component {
         }
     }
 
-    static getDerivedStateFromProps(props) {
-        if(props.workoutTemplate && props.currentUser && props.updateCurrentWorkout) {
+    static getDerivedStateFromProps(props, state) {
+        if(props.workoutTemplate && props.currentUser && props.updateCurrentWorkout && !state.workout) {
             const { workoutTemplate: { workoutName, exercises }, updateCurrentWorkout, currentUser } = props;
 
             const workoutToAdd = {
@@ -38,7 +38,7 @@ class WorkoutInProgress extends React.Component {
                     })) : null 
                 }),
                 date: new Date().toLocaleString(),
-                time: Date.now(),
+                time: 0,
                 user: firestore.doc(`/users/${currentUser.id}`)
             }
             updateCurrentWorkout(workoutToAdd);
@@ -50,23 +50,20 @@ class WorkoutInProgress extends React.Component {
     }
 
     completeWorkout = () => {
-        const { workout } = this.state;
-        this.setState({
-            workout: update(workout, {time: {$set: (Date.now() - workout.time)/60000}}), //Date in minutes, change that to timer later
-            completed: true
-        }, () => {
-            addDocumentToCollection('workouts', workout);
-            updateCurrentWorkout(workout);
-        });
+        this.setState(
+            {
+                workout: update(this.state.workout, {time: {$set: 10}}),
+                completed: true
+            }, () => addDocumentToCollection('workouts', this.state.workout)
+        );
     }
 
     handleExerciseChange = (id, sets) => {
-        const { workout } = this.state;
-        const { exercises } = workout;
+        const { exercises } = this.state.workout;
         const index = exercises.indexOf(exercises.find(exercise => exercise.id === id));
         this.setState({
-            workout: update(workout, {exercises: {[index]: {sets: {$set: sets}}}})
-        });
+            workout: update(this.state.workout, {exercises: {[index]: {sets: {$set: sets}}}})
+        }, () => this.props.updateCurrentWorkout(this.state.workout));
     }
 
     render() {
@@ -77,7 +74,10 @@ class WorkoutInProgress extends React.Component {
                 {
                     workout ? workout.exercises.map(({ id, ...otherProps }) => <CurrentWorkoutExercise key={id} id={id} onChange={this.handleExerciseChange} {...otherProps} />) : '...'
                 }
-                <CustomButton onClick={this.completeWorkout} >DONE</CustomButton>
+                <div className='actions'>
+                    <CustomButton onClick={() => this.completeWorkout()} >DONE</CustomButton>
+                    <CustomButton onClick={() => this.props.history.push('/start-workout')} >BACK</CustomButton>
+                </div>
                 {
                     completed ? <WorkoutCompleted workout={workout} /> : null
                 }

@@ -11,6 +11,11 @@ const workoutsReducer = (state = INITIAL_STATE, action) => {
                 ...state,
                 workouts: action.payload
             }
+        case WorkoutsActionTypes.UPDATE_WORKOUT_BY_ID:
+            return {
+                workouts: Object.keys(state.workouts).map(key =>
+                    state.workouts[key]).map(workout => workout.id === action.payload.id ? action.payload : workout)
+            }
         default:
             return state
     }

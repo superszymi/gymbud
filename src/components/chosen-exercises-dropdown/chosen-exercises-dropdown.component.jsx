@@ -19,7 +19,7 @@ const ChosenExercisesDropdown = ({ exercises, history, dispatch }) => (
             }
         </div>
         <CustomButton onClick={() => {
-            history.push('/workout-created');
+            history.push('/new-template');
             dispatch(toggleDropdownHidden());
             }}>PROCEED
         </CustomButton>
