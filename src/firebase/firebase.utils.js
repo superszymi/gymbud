@@ -85,9 +85,10 @@ const config = {
 
   export const convertTemplatesSnapshotToMap = (templates) => {
     const transformedTemplates = templates.docs.map(doc => {
-      const { workoutName, exercises } = doc.data();
+      const { workoutName, exercises, user } = doc.data();
       return {
         id: doc.id,
+        user: user,
         workoutName,
         exercises
       };
@@ -100,10 +101,10 @@ const config = {
 
   export const convertWorkoutsSnapshotToMap = workouts => {
     const transformedWorkouts = workouts.docs.map(doc => {
-      const { workoutName, date, time, exercises, user } = doc.data();
+      const { name, date, time, exercises, user } = doc.data();
       return {
         id: doc.id,
-        workoutName: workoutName,
+        workoutName: name,
         date: date,
         time: time,
         exercises: exercises,

@@ -13,6 +13,11 @@ const chosenExercisesReducer = (state = INITIAL_STATE, action) => {
                 ...state,
                 hidden: !state.hidden
             }
+        case ChosenExercisesActionTypes.HIDE_DROPDOWN:
+            return {
+                ...state,
+                hidden: true
+            }
         case ChosenExercisesActionTypes.ADD_EXERCISE_SET:
             return {
                 ...state,
@@ -32,6 +37,11 @@ const chosenExercisesReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 exercises: []
+            }
+        case ChosenExercisesActionTypes.UPDATE_EXERCISES:
+            return {
+                ...state,
+                exercises: action.payload
             }
         default:
             return state;

@@ -5,3 +5,8 @@ export const updateTemplates = templates => ({
     payload: templates
 })
 
+export const updateTemplateById = template => ({
+    type: WorkoutTemplatesActionTypes.UPDATE_TEMPLATE_BY_ID,
+    payload: template
+})
+

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import { ReactComponent as Logo } from '../../assets/muscles.svg';
 import { auth } from '../../firebase/firebase.utils';
+
 import ChosenExercisesIcon from '../chosen-exercises-icon/chosen-exercises-icon.component';
 import ChosenExercisesDropdown from '../chosen-exercises-dropdown/chosen-exercises-dropdown.component';
 
@@ -23,8 +24,11 @@ const Header = ({ currentUser, hidden, location, history }) => (
                     <Link className='option' to='/workouts'>
                         WORKOUTS
                     </Link>
+                    <Link className='option' to='/templates'>
+                        TEMPLATES
+                    </Link>
                     <Link className='option' to='/atlas'>
-                        NEW WORKOUT
+                        NEW TEMPLATE
                     </Link>
                     <Link className='option' to='/start-workout'>
                         START WORKOUT

@@ -5,17 +5,18 @@ import { connect } from 'react-redux';
 import './App.css';
 
 import { setCurrentUser } from './redux/user/user-actions';
+import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 
 import Header from './components/header/header.component';
 import Homepage from './pages/homepage/homepage.component';
 import ExerciseAtlasPage from './pages/exercise-atlas/exercise-atlas.component';
 import SignInSignUpPage from './pages/sign-in-sign-up/sign-in-sign-up.component';
 import WorkoutCreatedPage from './pages/workout-created/workout-created.component';
-
-import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 import StartWorkoutPage from './pages/start-workout/start-workout.component';
 import DashboardPage from './pages/dashboard/dashboard.component';
 import WorkoutsPage from './pages/workouts/workouts.component';
+import TemplatesPage from './pages/templates/templates.component';
+
 
 class App extends React.Component {
 
@@ -38,6 +39,7 @@ class App extends React.Component {
     });
   }
 
+
   componentWillUnmount() {
     this.unsubscribeFromAuth();
   }
@@ -54,6 +56,7 @@ class App extends React.Component {
           <Route exact path='/new-template' component={WorkoutCreatedPage} />
           <Route path='/start-workout' component={StartWorkoutPage} />
           <Route path='/workouts' component={WorkoutsPage} />
+          <Route path='/templates' component={TemplatesPage} />
         </Switch>
       </div>
     );
