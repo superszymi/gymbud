@@ -11,6 +11,7 @@ import { firestore, addDocumentToCollection } from '../../firebase/firebase.util
 import { updateCurrentWorkout, clearCurrentWorkout } from '../../redux/current-workout/current-workout-actions';
 import { selectCurrentUser } from '../../redux/user/user-selectors';
 import { selectWorkoutTemplate } from '../../redux/workout-templates/workout-templates-selectors';
+import { selectCurrentWorkoutItem } from '../../redux/current-workout/current-workout-selectors';
 
 import './workout-in-progress.styles.scss';
 
@@ -30,7 +31,7 @@ class WorkoutInProgress extends React.Component {
             const { workoutTemplate: { workoutName, exercises }, updateCurrentWorkout, currentUser } = props;
 
             const workoutToAdd = {
-                name: workoutName,
+                workoutName: workoutName,
                 exercises: exercises.map(exercise => exercise = {
                     id: exercise.id,
                     name: exercise.name,
@@ -43,12 +44,21 @@ class WorkoutInProgress extends React.Component {
                 time: 0,
                 user: firestore.doc(`/users/${currentUser.id}`)
             }
-            updateCurrentWorkout(workoutToAdd);
+            if(!props.currentWorkout) {
+                updateCurrentWorkout(workoutToAdd);
+                return {
+                    workout: workoutToAdd
+                }
+            }
             return {
-                workout: workoutToAdd
+                workout: props.currentWorkout
             }
         }
         return null;
+    }
+
+    componentWillUnmount() {
+        this.props.clearCurrentWorkout();
     }
 
     completeWorkout = () => {
@@ -93,7 +103,8 @@ class WorkoutInProgress extends React.Component {
 
 const mapStateToProps = (state, props) => ({
     workoutTemplate: selectWorkoutTemplate(props.match.params.templateName)(state),
-    currentUser: selectCurrentUser(state)
+    currentUser: selectCurrentUser(state),
+    currentWorkout: selectCurrentWorkoutItem(state)
 })
 
 const mapDispatchToProps = dispatch => ({

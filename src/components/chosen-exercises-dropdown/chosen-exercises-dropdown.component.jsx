@@ -28,7 +28,6 @@ const ChosenExercisesDropdown = ({ exercises, history, dispatch }) => (
         <CustomButton onClick={() => {
             dispatch(clearWorkout());
             dispatch(toggleDropdownHidden());
-            history.push('/templates');
             }}>CLEAR
         </CustomButton>
     </div>

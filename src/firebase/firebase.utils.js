@@ -88,7 +88,7 @@ const config = {
       const { workoutName, exercises, user } = doc.data();
       return {
         id: doc.id,
-        user: user,
+        user,
         workoutName,
         exercises
       };
@@ -101,14 +101,14 @@ const config = {
 
   export const convertWorkoutsSnapshotToMap = workouts => {
     const transformedWorkouts = workouts.docs.map(doc => {
-      const { name, date, time, exercises, user } = doc.data();
+      const { workoutName, date, time, exercises, user } = doc.data();
       return {
         id: doc.id,
-        workoutName: name,
-        date: date,
-        time: time,
-        exercises: exercises,
-        user: user
+        workoutName,
+        date,
+        time,
+        exercises,
+        user
       };
     });
     return transformedWorkouts.reduce((accumulator, workout) => {

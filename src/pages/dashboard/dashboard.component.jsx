@@ -1,8 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-
-import { selectCurrentUser } from '../../redux/user/user-selectors';
 
 import CustomButton from '../../components/custom-button/custom-button.component';
 
@@ -14,7 +11,7 @@ const DashboardPage = ({ currentUser, history }) => (
             <div className='title'>
                 <h1>
                 {
-                    /* currentUser ? currentUser.displayName ?  */`HELLO ${currentUser.displayName.toUpperCase()}!`/*  : '...' : '...' */
+                    `HELLO ${currentUser.displayName.toUpperCase()}!`
                 }
                 </h1>
                 <h3>A great day for an outdoor run!</h3>
@@ -32,8 +29,4 @@ const DashboardPage = ({ currentUser, history }) => (
     </div>
 )
 
-/* const mapStateToProps = state => ({
-    currentUser: selectCurrentUser(state)
-}) */
-
-export default withRouter(/* connect(mapStateToProps) */(DashboardPage));
+export default withRouter(DashboardPage);

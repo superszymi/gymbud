@@ -4,14 +4,20 @@ import { Route, withRouter } from 'react-router-dom';
 
 import { firestore, convertTemplatesSnapshotToMap } from '../../firebase/firebase.utils';
 import { updateTemplates } from '../../redux/workout-templates/workout-templates-actions';
-import { selectCurrentUser } from '../../redux/user/user-selectors';
 
 import StartWorkoutOverview from '../../components/start-workout-overview/start-workout-overview.component';
 import WorkoutInProgress from '../../components/workout-in-progress/workout-in-progress.component';
+import WithLoading from '../../components/with-loading/with-loading.component';
 
 import './start-workout.styles.scss';
 
+const StartWorkoutOverviewWithLoading = WithLoading(StartWorkoutOverview);
+const WorkoutInProgressWithLoading = WithLoading(WorkoutInProgress);
+
 class StartWorkoutPage extends React.Component {
+    state = {
+        loading: true
+    }
 
     unsubscribeFromSnapshot = null;
 
@@ -30,15 +36,22 @@ class StartWorkoutPage extends React.Component {
         this.unsubscribeFromSnapshot = templatesRef.get().then(snapshot => {
             const templatesMap = convertTemplatesSnapshotToMap(snapshot);
             updateTemplates(templatesMap);
+            if(this.state.loading){
+                this.setState({
+                    loading: false
+                })
+            }
         });
     }
 
     render() {
+        console.log(this.props);
         const { match } = this.props;
+        const { loading } = this.state;
         return (
             <div className='start-workout'>
-                <Route exact path={`${match.path}`} component={StartWorkoutOverview} />
-                <Route exact path={`${match.path}/:templateName`} component={WorkoutInProgress} />
+                <Route exact path={`${match.path}`} render={props => <StartWorkoutOverviewWithLoading isLoading={loading} {...props} />} />
+                <Route exact path={`${match.path}/:templateName`} render={props => <WorkoutInProgressWithLoading isLoading={loading} {...props} />} />
             </div>
         )
     }
@@ -48,8 +61,4 @@ const mapDispatchToProps = dispatch => ({
     updateTemplates: templates => dispatch(updateTemplates(templates))
 })
 
-const mapStateToProps = state => ({
-    currentUser: selectCurrentUser(state)
-})
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(StartWorkoutPage));
+export default withRouter(connect(null, mapDispatchToProps)(StartWorkoutPage));

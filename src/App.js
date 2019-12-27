@@ -70,13 +70,13 @@ class App extends React.Component {
         <Header />
         <Switch>
           <Route exact path='/' render={() => this.props.currentUser ? (<Redirect to='/dashboard' />) : (<Homepage />)} /> 
-          <Route exact path='/dashboard' render={() => <DashboardPageWithLoading isLoading={loading} currentUser={currentUser} />} />
+          <Route exact path='/dashboard' component={props => <DashboardPageWithLoading isLoading={loading} currentUser={currentUser} {...props} />} />
           <Route path='/atlas' component={ExerciseAtlasPage} />
           <Route exact path='/sign-in' render={() => this.props.currentUser ? (<Redirect to='/dashboard' />) : (<SignInSignUpPage />)} />
-          <Route exact path='/new-template' component={WorkoutCreatedPage} />
-          <Route path='/start-workout' component={StartWorkoutPage} />
-          <Route path='/workouts' component={WorkoutsPage} />
-          <Route path='/templates' component={TemplatesPage} />
+          <Route exact path='/new-template' render={props => <WorkoutCreatedPage currentUser={currentUser} {...props} /> } />
+          <Route path='/start-workout' render={props => <StartWorkoutPage currentUser={currentUser} {...props} />} />
+          <Route path='/workouts' render={props => <WorkoutsPage currentUser={currentUser} {...props} />} />
+          <Route path='/templates' render={props => <TemplatesPage currentUser={currentUser} {...props} />} />
         </Switch>
       </div>
     );

@@ -11,7 +11,7 @@ const AtlasExerciseItem = ({ exercise, addExerciseSet }) => {
     const { name, difficulty } = exercise;
     return(
     <div className='exercise-item'>
-        <h1 className='title'>{name.toUpperCase()}</h1>
+        <h1>{name[0].toUpperCase() + name.slice(1)}</h1>
         <CustomButton onClick={() => addExerciseSet(exercise)}>ADD SET</CustomButton>
         <div className='exercise-footer'>Difficulty: {difficulty}</div>
     </div>

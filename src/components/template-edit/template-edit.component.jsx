@@ -34,7 +34,7 @@ class TemplateEdit extends React.Component {
 
     handleChange = event => {
         const { value, name } = event.target;
-        this.setState({ [name]: value });
+        this.setState({ template: update(this.state.template, {[name]: {$set: value}}) });
     };
 
     addExercises = () => {
@@ -89,7 +89,7 @@ class TemplateEdit extends React.Component {
         const { template } = this.state;
         return (
             <div className='template-edit'>
-                <FormInput required onChange={this.handleChange} name='workoutName' label='Workout name' value={template ? template.workoutName : '...'}/>
+                <FormInput required onChange={this.handleChange} name='workoutName' label='Workout name' value={template.workoutName}/>
                 <div className='template-edit-header'>
                     <div className='header-block'>
                         <span>Exercise</span>

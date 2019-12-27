@@ -7,8 +7,8 @@ class CurrentWorkoutSet extends React.Component {
         super(props);
 
         this.state = {
-            reps: '',
-            weight: ''
+            reps: props.set.reps,
+            weight: props.set.weight
         }
     }
 

@@ -7,6 +7,7 @@
     "@testing-library/react": "^9.3.3",
     "@testing-library/user-event": "^7.1.2",
     "firebase": "^7.6.0",
+    "flatted": "^2.0.1",
     "immutability-helper": "^3.0.1",
     "node-sass": "^4.13.0",
     "react": "^16.12.0",

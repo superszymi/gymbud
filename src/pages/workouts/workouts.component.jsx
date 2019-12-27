@@ -4,15 +4,20 @@ import { Route } from 'react-router-dom';
 
 import WorkoutList from '../../components/workout-list/workout-list.component';
 import WorkoutDetails from '../../components/workout-details/workout-details.component';
+import WithLoading from '../../components/with-loading/with-loading.component';
 
 import { firestore, convertWorkoutsSnapshotToMap } from '../../firebase/firebase.utils';
 import { updateWorkouts } from '../../redux/workouts/workouts-actions';
-import { selectCurrentUser } from '../../redux/user/user-selectors';
 
 import './workouts.styles.scss';
 
+const WorkoutListWithLoading = WithLoading(WorkoutList);
+const WorkoutDetailsWithLoading = WithLoading(WorkoutDetails);
 
 class WorkoutsPage extends React.Component {
+    state = {
+        loading: true
+    }
 
     unsubscribeFromSnapshot = null;
 
@@ -32,26 +37,28 @@ class WorkoutsPage extends React.Component {
         this.unsubscribeFromSnapshot = workoutsRef.get().then(snapshot => {
             const workoutsMap = convertWorkoutsSnapshotToMap(snapshot);
             updateWorkouts(workoutsMap);
+            if(this.state.loading){
+                this.setState({
+                    loading: false
+                })
+            }
         });
     }
 
     render() {
         const { match } = this.props;
+        const { loading } = this.state;
         return(
             <div className='workouts'>
-                <Route exact path={`${match.url}`} component={WorkoutList} />
-                <Route exact path={`${match.url}/:workoutId`} component={WorkoutDetails} />
+                <Route exact path={`${match.url}`} render={props => <WorkoutListWithLoading isLoading={loading} {...props} /> } />
+                <Route exact path={`${match.url}/:workoutId`} render={props => <WorkoutDetailsWithLoading isLoading={loading} {...props} /> } />
             </div>
         );
     }
 }
 
-const mapStateToProps = state => ({
-    currentUser: selectCurrentUser(state)
-})
-
 const mapDispatchToProps = dispatch => ({
     updateWorkouts: workouts => dispatch(updateWorkouts(workouts))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(WorkoutsPage);
+export default connect(null, mapDispatchToProps)(WorkoutsPage);

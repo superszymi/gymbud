@@ -5,7 +5,6 @@ import { withRouter } from 'react-router-dom';
 
 import { firestore, addDocumentToCollection } from '../../firebase/firebase.utils';
 import { clearWorkout } from '../../redux/chosen-exercises/chosen-exercises-actions';
-import { selectCurrentUser } from '../../redux/user/user-selectors';
 import { selectChosenExercisesItems, selectChosenExercisesWorkoutName, selectChosenExercisesCount, selectChosenExercisesSetCount } from '../../redux/chosen-exercises/chosen-exercises-selectors';
 
 import FormInput from '../../components/form-input/form-input.component';
@@ -112,8 +111,7 @@ const mapStateToProps = state => ({
     chosenExercises: selectChosenExercisesItems(state),
     workoutName: selectChosenExercisesWorkoutName(state),
     totalExercises: selectChosenExercisesCount(state),
-    totalSets: selectChosenExercisesSetCount(state),
-    currentUser: selectCurrentUser(state)
+    totalSets: selectChosenExercisesSetCount(state)
 })
 
 const mapDispatchToProps = dispatch => ({
