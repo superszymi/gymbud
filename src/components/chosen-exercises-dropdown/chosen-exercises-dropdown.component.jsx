@@ -5,7 +5,9 @@ import { compose } from 'redux';
 
 import CustomButton from '../custom-button/custom-button.component';
 import ChosenExerciseItem from '../chosen-exercise-item/chosen-exercise-item.component';
-import { toggleDropdownHidden } from '../../redux/chosen-exercises/chosen-exercises-actions';
+
+import { toggleDropdownHidden, clearWorkout } from '../../redux/chosen-exercises/chosen-exercises-actions';
+import { selectChosenExercisesItems } from '../../redux/chosen-exercises/chosen-exercises-selectors';
 
 import './chosen-exercises-dropdown.styles.scss';
 
@@ -23,11 +25,17 @@ const ChosenExercisesDropdown = ({ exercises, history, dispatch }) => (
             dispatch(toggleDropdownHidden());
             }}>PROCEED
         </CustomButton>
+        <CustomButton onClick={() => {
+            dispatch(clearWorkout());
+            dispatch(toggleDropdownHidden());
+            history.push('/templates');
+            }}>CLEAR
+        </CustomButton>
     </div>
 )
 
-    const mapStateToProps = ({ chosenExercises: { exercises } }) => ({
-    exercises
+const mapStateToProps = state => ({
+    exercises: selectChosenExercisesItems(state)
 })
 
 export default compose(

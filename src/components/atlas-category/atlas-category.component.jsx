@@ -1,11 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import AtlasExerciseItem from '../../components/atlas-exercise-item/atlas-exercise-item.component';
+import AtlasExerciseItem from '../atlas-exercise-item/atlas-exercise-item.component';
+
+import { selectCategory } from '../../redux/atlas/atlas-selectors';
 
 import './atlas-category.styles.scss';
 
-const AtlasCategoryPage = ({ category }) => {
+const AtlasCategory = ({ category }) => {
     return (
         <div className='category-page'>
             <h1 className='title'>{category ? category.title.toUpperCase() : '...'}</h1>
@@ -19,8 +21,8 @@ const AtlasCategoryPage = ({ category }) => {
     )
 }
 
-const mapStateToProps = ({ atlas: { categories } }, props) => ({
-    category: categories ? Object.keys(categories).map(key => categories[key]).find(category => category.routeName === props.match.params.title) : null
+const mapStateToProps = (state, props) => ({
+    category: selectCategory(props.match.params.title)(state)
 })
 
-export default connect(mapStateToProps)(AtlasCategoryPage);
+export default connect(mapStateToProps)(AtlasCategory);

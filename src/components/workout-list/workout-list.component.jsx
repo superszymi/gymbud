@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import WorkoutItem from '../workout-item/workout-item.component';
 
 import { updateWorkouts } from '../../redux/workouts/workouts-actions';
+import { selectWorkoutsMap } from '../../redux/workouts/workouts-selectors';
 
 import './workout-list.styles.scss';
 
@@ -25,8 +26,8 @@ class WorkoutList extends React.Component {
     }
 }
 
-const mapStateToProps = ({ workouts: { workouts } }) => ({
-    workouts: Object.keys(workouts).map(key => workouts[key])
+const mapStateToProps = state => ({
+    workouts: selectWorkoutsMap(state)
 })
 
 const mapDispatchToProps = dispatch => ({

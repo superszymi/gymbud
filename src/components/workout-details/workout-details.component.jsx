@@ -9,6 +9,7 @@ import WorkoutCompleted from '../workout-completed/workout-completed.component';
 
 import { updateDocumentInCollection } from '../../firebase/firebase.utils';
 import { updateWorkoutById } from '../../redux/workouts/workouts-actions';
+import { selectWorkout } from '../../redux/workouts/workouts-selectors';
 
 import './workout-details.styles.scss';
 
@@ -69,8 +70,8 @@ class WorkoutDetails extends React.Component {
     }
 }
 
-const mapStateToProps = ({ workouts: { workouts } }, { match }) => ({
-    workout: Object.keys(workouts).map(key => workouts[key]).find(workout => workout.id === match.params.workoutId)
+const mapStateToProps = (state, props) => ({
+    workout: selectWorkout(props.match.params.workoutId)(state)
 })
 
 const mapDispatchToProps = dispatch => ({

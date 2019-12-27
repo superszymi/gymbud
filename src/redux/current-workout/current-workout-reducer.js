@@ -12,7 +12,7 @@ const currentWorkoutReducer = (state = INITIAL_STATE, action) => {
             }
         case CurrentWorkoutActionTypes.CLEAR_CURRENT_WORKOUT:
             return {
-                currentWorkout: INITIAL_STATE
+                currentWorkout: null
             }
         default:
             return state;

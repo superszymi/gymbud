@@ -5,6 +5,8 @@ import { withRouter } from 'react-router-dom';
 
 import { firestore, addDocumentToCollection } from '../../firebase/firebase.utils';
 import { clearWorkout } from '../../redux/chosen-exercises/chosen-exercises-actions';
+import { selectCurrentUser } from '../../redux/user/user-selectors';
+import { selectChosenExercisesItems, selectChosenExercisesWorkoutName, selectChosenExercisesCount, selectChosenExercisesSetCount } from '../../redux/chosen-exercises/chosen-exercises-selectors';
 
 import FormInput from '../../components/form-input/form-input.component';
 import CustomButton from '../../components/custom-button/custom-button.component';
@@ -21,6 +23,13 @@ class WorkoutCreatedPage extends React.Component {
             ...this.state,
             workoutName: ''
         }
+    }
+
+    static getDerivedStateFromProps(props, state) {
+        if(props.workoutName && props.workoutName !== state.workoutName) {
+            return props;
+        }
+        return null;
     }
 
     handleChange = event => {
@@ -48,11 +57,11 @@ class WorkoutCreatedPage extends React.Component {
     }
 
     addWorkoutTemplate = () => {
-        const { userId, chosenExercises } = this.props;
+        const { currentUser, chosenExercises } = this.props;
         const { workoutName } = this.state;
 
         const exercises = chosenExercises.map(({name, sets, id}) => ({name, sets, id}));
-        const user = firestore.doc(`/users/${userId}`)
+        const user = firestore.doc(`/users/${currentUser.id}`)
 
         addDocumentToCollection('workoutTemplates', { workoutName, user, exercises });
     }
@@ -99,12 +108,12 @@ class WorkoutCreatedPage extends React.Component {
     }
 }
 
-const mapStateToProps = ({ chosenExercises: { exercises }, user: { currentUser } }) => ({
-    chosenExercises: exercises,
-    totalExercises: exercises.length,
-    totalSets: exercises.reduce((accumulator, currentObject) => 
-        accumulator + currentObject.sets, 0),
-    userId: currentUser.id
+const mapStateToProps = state => ({
+    chosenExercises: selectChosenExercisesItems(state),
+    workoutName: selectChosenExercisesWorkoutName(state),
+    totalExercises: selectChosenExercisesCount(state),
+    totalSets: selectChosenExercisesSetCount(state),
+    currentUser: selectCurrentUser(state)
 })
 
 const mapDispatchToProps = dispatch => ({

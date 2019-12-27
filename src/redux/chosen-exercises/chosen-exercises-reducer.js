@@ -2,6 +2,7 @@ import { ChosenExercisesActionTypes } from './chosen-exercises-action-types';
 import { addExerciseToChosenExercises, removeExerciseSetFromChosenExercises } from './chosen-exercises.utils';
 
 const INITIAL_STATE = {
+    workoutName: '',
     hidden: true,
     exercises: []
 }
@@ -36,12 +37,14 @@ const chosenExercisesReducer = (state = INITIAL_STATE, action) => {
         case ChosenExercisesActionTypes.CLEAR_WORKOUT:
             return {
                 ...state,
+                workoutName: '',
                 exercises: []
             }
         case ChosenExercisesActionTypes.UPDATE_EXERCISES:
             return {
                 ...state,
-                exercises: action.payload
+                exercises: action.payload.exercises,
+                workoutName: action.payload.workoutName
             }
         default:
             return state;

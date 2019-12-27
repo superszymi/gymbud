@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
+import { selectCurrentUser } from '../../redux/user/user-selectors';
+
 import CustomButton from '../../components/custom-button/custom-button.component';
 
 import './dashboard.styles.scss'
@@ -30,8 +32,8 @@ const DashboardPage = ({ currentUser, history }) => (
     </div>
 )
 
-const mapStateToProps = ({ user: { currentUser  } }) => ({
-    currentUser
+const mapStateToProps = state => ({
+    currentUser: selectCurrentUser(state)
 })
 
 export default withRouter(connect(mapStateToProps)(DashboardPage));

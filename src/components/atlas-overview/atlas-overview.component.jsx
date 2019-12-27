@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 
 import AtlasCategoryItem from '../atlas-category-item/atlas-category-item.component';
 
+import { selectCategoriesMap } from '../../redux/atlas/atlas-selectors';
+
 import './atlas-overview.styles.scss';
 
 const AtlasOverview = ({ categories }) => (
@@ -15,8 +17,8 @@ const AtlasOverview = ({ categories }) => (
     </div>
 )
 
-const mapStateToProps = ({ atlas: { categories }}) => ({
-    categories: categories ? Object.keys(categories).map(key => categories[key]) : []
+const mapStateToProps = state => ({
+    categories: selectCategoriesMap(state)
 })
 
 export default connect(mapStateToProps)(AtlasOverview);

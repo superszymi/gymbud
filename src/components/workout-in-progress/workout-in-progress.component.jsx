@@ -8,7 +8,9 @@ import CustomButton from '../custom-button/custom-button.component';
 import WorkoutCompleted from '../workout-completed/workout-completed.component';
 
 import { firestore, addDocumentToCollection } from '../../firebase/firebase.utils';
-import { updateCurrentWorkout } from '../../redux/current-workout/current-workout-actions';
+import { updateCurrentWorkout, clearCurrentWorkout } from '../../redux/current-workout/current-workout-actions';
+import { selectCurrentUser } from '../../redux/user/user-selectors';
+import { selectWorkoutTemplate } from '../../redux/workout-templates/workout-templates-selectors';
 
 import './workout-in-progress.styles.scss';
 
@@ -76,7 +78,10 @@ class WorkoutInProgress extends React.Component {
                 }
                 <div className='actions'>
                     <CustomButton onClick={() => this.completeWorkout()} >DONE</CustomButton>
-                    <CustomButton onClick={() => this.props.history.push('/start-workout')} >BACK</CustomButton>
+                    <CustomButton onClick={() => {
+                        this.props.clearCurrentWorkout();
+                        this.props.history.push('/start-workout')
+                    }} >BACK</CustomButton>
                 </div>
                 {
                     completed ? <WorkoutCompleted workout={workout} /> : null
@@ -86,13 +91,14 @@ class WorkoutInProgress extends React.Component {
     }
 }
 
-const mapStateToProps = ({ workoutTemplates: { workoutTemplates }, user: { currentUser } }, { match }) => ({
-    workoutTemplate: Object.keys(workoutTemplates).map(key => workoutTemplates[key]).find(template => template.workoutName === match.params.templateName),
-    currentUser
+const mapStateToProps = (state, props) => ({
+    workoutTemplate: selectWorkoutTemplate(props.match.params.templateName)(state),
+    currentUser: selectCurrentUser(state)
 })
 
 const mapDispatchToProps = dispatch => ({
-    updateCurrentWorkout: workout => dispatch(updateCurrentWorkout(workout))
+    updateCurrentWorkout: workout => dispatch(updateCurrentWorkout(workout)),
+    clearCurrentWorkout: () => dispatch(clearCurrentWorkout())
 })
 
 

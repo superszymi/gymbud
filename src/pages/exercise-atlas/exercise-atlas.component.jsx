@@ -7,7 +7,7 @@ import { updateAtlas } from '../../redux/atlas/atlas-actions';
 
 import './exercise-atlas.styles.scss';
 import AtlasOverview from '../../components/atlas-overview/atlas-overview.component';
-import AtlasCategoryPage from '../atlas-category/atlas-category.component';
+import AtlasCategory from '../../components/atlas-category/atlas-category.component';
 
 class ExerciseAtlasPage extends React.Component {
 
@@ -27,7 +27,7 @@ class ExerciseAtlasPage extends React.Component {
         return (
             <div className='exercise-atlas'>
                 <Route exact path={`${match.path}`} component={AtlasOverview} />
-                <Route path={`${match.path}/:title`} component={AtlasCategoryPage} />
+                <Route path={`${match.path}/:title`} component={AtlasCategory} />
             </div>
         );
     }

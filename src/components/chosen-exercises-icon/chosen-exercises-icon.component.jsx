@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { toggleDropdownHidden } from '../../redux/chosen-exercises/chosen-exercises-actions';
+import { selectChosenExercisesCount } from '../../redux/chosen-exercises/chosen-exercises-selectors';
 
 import { ReactComponent as ExercisesIcon } from '../../assets/dumbbell.svg';
 
@@ -18,8 +19,8 @@ const mapDispatchToProps = dispatch => ({
     toggleDropdownHidden: () => dispatch(toggleDropdownHidden())
 })
 
-const mapStateToProps = ({ chosenExercises: { exercises }}) => ({
-    exerciseCount: exercises.length
+const mapStateToProps = state => ({
+    exerciseCount: selectChosenExercisesCount(state)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChosenExercisesIcon);

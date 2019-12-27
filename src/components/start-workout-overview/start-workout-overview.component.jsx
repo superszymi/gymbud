@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 
 import StartWorkoutItem from '../start-workout-item/start-workout-item.component';
 
+import { selectWorkoutTemplatesMap } from '../../redux/workout-templates/workout-templates-selectors';
+
 import './start-workout-overview.styles.scss';
 
 const StartWorkoutOverview = ({ workoutTemplates }) => (
@@ -14,8 +16,8 @@ const StartWorkoutOverview = ({ workoutTemplates }) => (
 )
 
 
-const mapStateToProps = ({ workoutTemplates: { workoutTemplates } }) => ({
-    workoutTemplates: Object.keys(workoutTemplates).map(key => workoutTemplates[key])
+const mapStateToProps = state => ({
+    workoutTemplates: selectWorkoutTemplatesMap(state)
 })
 
 export default connect(mapStateToProps)(StartWorkoutOverview);

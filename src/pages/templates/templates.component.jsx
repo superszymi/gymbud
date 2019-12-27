@@ -4,6 +4,7 @@ import { Route, withRouter } from 'react-router-dom';
 
 import { firestore, convertTemplatesSnapshotToMap } from '../../firebase/firebase.utils';
 import { updateTemplates } from '../../redux/workout-templates/workout-templates-actions';
+import { selectCurrentUser } from '../../redux/user/user-selectors';
 
 import TemplatesOverview from '../../components/templates-overview/templates-overview.component';
 import TemplateEdit from '../../components/template-edit/template-edit.component';
@@ -48,8 +49,8 @@ const mapDispatchToProps = dispatch => ({
     updateTemplates: templates => dispatch(updateTemplates(templates))
 })
 
-const mapStateToProps = ({ user: { currentUser } }) => ({
-    currentUser
+const mapStateToProps = state => ({
+    currentUser: selectCurrentUser(state)
 })
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(TemplatesPage));

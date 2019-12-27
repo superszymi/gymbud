@@ -7,6 +7,7 @@ import update from 'immutability-helper';
 import { updateDocumentInCollection } from '../../firebase/firebase.utils';
 import { updateTemplateById } from '../../redux/workout-templates/workout-templates-actions';
 import { updateExercises } from '../../redux/chosen-exercises/chosen-exercises-actions';
+import { selectWorkoutTemplate } from '../../redux/workout-templates/workout-templates-selectors';
 
 import FormInput from '../../components/form-input/form-input.component';
 import CustomButton from '../../components/custom-button/custom-button.component';
@@ -39,7 +40,7 @@ class TemplateEdit extends React.Component {
     addExercises = () => {
         const { history } = this.props;
         this.updateWorkoutTemplate();
-        this.props.updateExercises(this.state.template.exercises);
+        this.props.updateExercises(this.state.template);
         history.push('/atlas');
     }
 
@@ -127,8 +128,8 @@ class TemplateEdit extends React.Component {
     }
 }
 
-const mapStateToProps = ({ workoutTemplates: { workoutTemplates } }, { match }) => ({
-    template: Object.keys(workoutTemplates).map(key => workoutTemplates[key]).find(template => template.workoutName === match.params.templateName)
+const mapStateToProps = (state, props) => ({
+    template: selectWorkoutTemplate(props.match.params.templateName)(state)
 })
 
 const mapDispatchToProps = dispatch => ({

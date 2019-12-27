@@ -7,6 +7,7 @@ import WorkoutDetails from '../../components/workout-details/workout-details.com
 
 import { firestore, convertWorkoutsSnapshotToMap } from '../../firebase/firebase.utils';
 import { updateWorkouts } from '../../redux/workouts/workouts-actions';
+import { selectCurrentUser } from '../../redux/user/user-selectors';
 
 import './workouts.styles.scss';
 
@@ -45,8 +46,8 @@ class WorkoutsPage extends React.Component {
     }
 }
 
-const mapStateToProps = ({ user: { currentUser } }) => ({
-    currentUser
+const mapStateToProps = state => ({
+    currentUser: selectCurrentUser(state)
 })
 
 const mapDispatchToProps = dispatch => ({

@@ -5,7 +5,7 @@ import CustomButton from '../custom-button/custom-button.component';
 
 import './start-workout-item.styles.scss';
 
-const StartWorkoutItem = ({id,  workoutName, exercises, match, history }) => (
+const StartWorkoutItem = ({ workoutName, exercises, history }) => (
     <div className='start-workout-item'>
         <h1>{workoutName ? workoutName : '...'}</h1>
         <div className='buttons'>
