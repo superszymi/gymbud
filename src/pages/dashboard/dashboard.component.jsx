@@ -14,7 +14,7 @@ const DashboardPage = ({ currentUser, history }) => (
             <div className='title'>
                 <h1>
                 {
-                    currentUser ? currentUser.displayName ? `HELLO ${currentUser.displayName.toUpperCase()}!` : 'HELLO!' : '...'
+                    /* currentUser ? currentUser.displayName ?  */`HELLO ${currentUser.displayName.toUpperCase()}!`/*  : '...' : '...' */
                 }
                 </h1>
                 <h3>A great day for an outdoor run!</h3>
@@ -32,8 +32,8 @@ const DashboardPage = ({ currentUser, history }) => (
     </div>
 )
 
-const mapStateToProps = state => ({
+/* const mapStateToProps = state => ({
     currentUser: selectCurrentUser(state)
-})
+}) */
 
-export default withRouter(connect(mapStateToProps)(DashboardPage));
+export default withRouter(/* connect(mapStateToProps) */(DashboardPage));

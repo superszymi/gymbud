@@ -8,6 +8,8 @@ import { setCurrentUser } from './redux/user/user-actions';
 import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 import { selectCurrentUser } from './redux/user/user-selectors';
 
+import WithLoading from './components/with-loading/with-loading.component';
+
 import Header from './components/header/header.component';
 import Homepage from './pages/homepage/homepage.component';
 import ExerciseAtlasPage from './pages/exercise-atlas/exercise-atlas.component';
@@ -18,8 +20,12 @@ import DashboardPage from './pages/dashboard/dashboard.component';
 import WorkoutsPage from './pages/workouts/workouts.component';
 import TemplatesPage from './pages/templates/templates.component';
 
+const DashboardPageWithLoading = WithLoading(DashboardPage);
 
 class App extends React.Component {
+  state = {
+    loading: true
+  }
 
   unsubscribeFromAuth = null;
 
@@ -40,18 +46,31 @@ class App extends React.Component {
     });
   }
 
+  static getDerivedStateFromProps(props) {
+    if(props.currentUser) {
+      if(props.currentUser.displayName) {
+        return {
+          ...props,
+          loading: false
+        }
+      }
+    }
+    return null;
+  }
+
 
   componentWillUnmount() {
     this.unsubscribeFromAuth();
   }
 
   render() {
+    const { loading, currentUser } = this.state;
     return (
       <div>
         <Header />
         <Switch>
           <Route exact path='/' render={() => this.props.currentUser ? (<Redirect to='/dashboard' />) : (<Homepage />)} /> 
-          <Route exact path='/dashboard' component={DashboardPage} />
+          <Route exact path='/dashboard' render={() => <DashboardPageWithLoading isLoading={loading} currentUser={currentUser} />} />
           <Route path='/atlas' component={ExerciseAtlasPage} />
           <Route exact path='/sign-in' render={() => this.props.currentUser ? (<Redirect to='/dashboard' />) : (<SignInSignUpPage />)} />
           <Route exact path='/new-template' component={WorkoutCreatedPage} />
