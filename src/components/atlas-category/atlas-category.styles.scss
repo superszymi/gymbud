@@ -1,13 +1,12 @@
-.category-page {
-    width: 70%;
+.atlas-category-container {
     display: flex;
     flex-direction: column;
     align-items: center;
   
-    .items {
-      width: 100%;
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      grid-gap: 10px;
+    .atlas-category {
+        width: 70%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
     }
   }

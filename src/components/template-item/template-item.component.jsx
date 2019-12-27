@@ -22,7 +22,7 @@ class TemplateItem extends React.Component {
                 <h1>{workoutName ? workoutName : '...'}</h1>
                 <div className='buttons'>
                     <CustomButton onClick={() => history.push(`/templates/${workoutName}`)}>EDIT</CustomButton>
-                    <CustomButton onClick={() => this.deleteTemplate(id)}>DELETE</CustomButton>
+                    <CustomButton inverted onClick={() => this.deleteTemplate(id)}>DELETE</CustomButton>
                 </div>
                 <div className='details'>
                     <h3>Exercises: 

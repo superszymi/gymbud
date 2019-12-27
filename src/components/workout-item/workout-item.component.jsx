@@ -23,7 +23,7 @@ class WorkoutItem extends React.Component {
                 <h1>{workoutName} from {date.substring(0, 10)}</h1>
                 <div className='buttons'>
                     <CustomButton onClick={() => history.push(`/workouts/${id}`)}>EDIT</CustomButton>
-                    <CustomButton onClick={() => this.deleteWorkout(id)}>DELETE</CustomButton>
+                    <CustomButton inverted onClick={() => this.deleteWorkout(id)}>DELETE</CustomButton>
                 </div>
                 <div className='details'>
                     <h3>Weights lifted: {

@@ -18,6 +18,8 @@ class TemplatesOverview extends React.Component {
         const { workoutTemplates } = this.props;
         return (
             <div className='templates-overview'>
+                <h1>Manage your workout templates</h1>
+                <h4>Here you can adjust or delete your workout templates</h4>
                 {
                     workoutTemplates ? workoutTemplates.map(({ id, ...otherProps }) => <TemplateItem key={id} id={id} {...otherProps} handleTemplateDelete={this.deleteTemplate} />) : '...'
                 }

@@ -87,7 +87,7 @@ class WorkoutInProgress extends React.Component {
                     workout ? workout.exercises.map(({ id, ...otherProps }) => <CurrentWorkoutExercise key={id} id={id} onChange={this.handleExerciseChange} {...otherProps} />) : '...'
                 }
                 <div className='actions'>
-                    <CustomButton onClick={() => this.completeWorkout()} >DONE</CustomButton>
+                    <CustomButton inverted onClick={() => this.completeWorkout()} >DONE</CustomButton>
                     <CustomButton onClick={() => {
                         this.props.clearCurrentWorkout();
                         this.props.history.push('/start-workout')

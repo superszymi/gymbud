@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 
 import { clearExercise, addExerciseSet, removeExerciseSet } from '../../redux/chosen-exercises/chosen-exercises-actions';
 
-import './workout-created-item.styles.scss';
+import './review-template-item.styles.scss';
 
-const WorkoutCreatedItem = ({ exercise, clearExercise, addExerciseSet, removeExerciseSet }) => {
+const ReviewTemplateItem = ({ exercise, clearExercise, addExerciseSet, removeExerciseSet }) => {
     const { name, sets } = exercise;
     return(
-        <div className='workout-created-item'>
+        <div className='review-template-item'>
             <span className='name'>{name}</span>
             <span className='sets'>
                 <div className='arrow' onClick={() => removeExerciseSet(exercise)}>&#10094;</div>
@@ -25,4 +25,4 @@ const mapDispatchToProps = dispatch => ({
     removeExerciseSet: exercise => dispatch(removeExerciseSet(exercise))
 })
 
-export default connect(null, mapDispatchToProps)(WorkoutCreatedItem);
+export default connect(null, mapDispatchToProps)(ReviewTemplateItem);

@@ -7,14 +7,14 @@ import { firestore, addDocumentToCollection } from '../../firebase/firebase.util
 import { clearWorkout } from '../../redux/chosen-exercises/chosen-exercises-actions';
 import { selectChosenExercisesItems, selectChosenExercisesWorkoutName, selectChosenExercisesCount, selectChosenExercisesSetCount } from '../../redux/chosen-exercises/chosen-exercises-selectors';
 
-import FormInput from '../../components/form-input/form-input.component';
-import CustomButton from '../../components/custom-button/custom-button.component';
+import FormInput from '../form-input/form-input.component';
+import CustomButton from '../custom-button/custom-button.component';
 
-import WorkoutCreatedItem from '../../components/workout-created-item/workout-created-item.component';
+import ReviewTemplateItem from '../review-template-item/review-template-item.component';
 
-import './workout-created.styles.scss';
+import './review-template.styles.scss';
 
-class WorkoutCreatedPage extends React.Component {
+class ReviewTemplate extends React.Component {
     constructor() {
         super();
 
@@ -68,9 +68,9 @@ class WorkoutCreatedPage extends React.Component {
     render() {
         const { chosenExercises, totalExercises, totalSets } = this.props;
         return (
-            <div className='workout-created-page'>
+            <div className='review-template'>
                 <FormInput required onChange={this.handleChange} name='workoutName' label='Workout name' value={this.state.workoutName}/>
-                <div className='workout-created-header'>
+                <div className='review-template-header'>
                     <div className='header-block'>
                         <span>Exercise</span>
                     </div>
@@ -82,7 +82,7 @@ class WorkoutCreatedPage extends React.Component {
                     </div>
                 </div>
                 {
-                    chosenExercises.map(exercise => <WorkoutCreatedItem key={exercise.id} exercise={exercise} />)
+                    chosenExercises.map(exercise => <ReviewTemplateItem key={exercise.id} exercise={exercise} />)
                 }
                 <div className='total'>
                     <span>Exercises: {totalExercises}</span>
@@ -98,7 +98,7 @@ class WorkoutCreatedPage extends React.Component {
                         <span>Save template and go back to dashboard</span>
                     </div>
                     <div className='action'>
-                        <CustomButton onClick={() => this.discardAndBack()}>DISCARD</CustomButton>
+                        <CustomButton inverted onClick={() => this.discardAndBack()}>DISCARD</CustomButton>
                         <span>Discard template and go back to dashboard</span>
                     </div>
                 </div>
@@ -121,4 +121,4 @@ const mapDispatchToProps = dispatch => ({
 export default compose(
     withRouter,
     connect(mapStateToProps, mapDispatchToProps)
-)(WorkoutCreatedPage);
+)(ReviewTemplate);

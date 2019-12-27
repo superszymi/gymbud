@@ -60,7 +60,7 @@ class WorkoutDetails extends React.Component {
                 }
                 <div className='actions'>
                     <CustomButton onClick={this.saveWorkout} >SAVE</CustomButton>
-                    <CustomButton onClick={() => this.props.history.push('/workouts')} >BACK</CustomButton>
+                    <CustomButton inverted onClick={() => this.props.history.push('/workouts')} >BACK</CustomButton>
                 </div>
                 {
                     updated ? <WorkoutCompleted isCurrent={false} workout={workout} /> : null

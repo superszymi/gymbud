@@ -10,6 +10,7 @@ import './atlas-overview.styles.scss';
 const AtlasOverview = ({ categories }) => (
     <div className='atlas-overview-container'>
         <h1>Find your exercise</h1>
+        <h4>Choose a body part to view exercises that train it</h4>
         <div className='atlas-overview'>
             {
                 categories.map(({ id, ...otherProps }) => (

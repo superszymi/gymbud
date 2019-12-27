@@ -18,6 +18,8 @@ class WorkoutList extends React.Component {
         const { workouts } = this.props;
         return(
             <div className='workout-list'>
+                <h1>Your past workouts</h1>
+                <h4>If you made a mistake when entering information, you can always edit past workouts</h4>
                 {
                     workouts ? workouts.map(workout => <WorkoutItem key={workout.id} workout={workout} handleWorkoutDelete={this.deleteWorkout}/>) : '...'
                 }

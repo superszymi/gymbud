@@ -11,7 +11,7 @@ import { selectChosenExercisesItems } from '../../redux/chosen-exercises/chosen-
 
 import './chosen-exercises-dropdown.styles.scss';
 
-const ChosenExercisesDropdown = ({ exercises, history, dispatch }) => (
+const ChosenExercisesDropdown = ({ exercises, history, location, dispatch }) => (
     <div className='chosen-exercises-dropdown'>
         <div className='exercises'>
             {
@@ -21,11 +21,12 @@ const ChosenExercisesDropdown = ({ exercises, history, dispatch }) => (
             }
         </div>
         <CustomButton onClick={() => {
-            history.push('/new-template');
             dispatch(toggleDropdownHidden());
+            console.log(location)
+            history.push("/atlas/review-template")
             }}>PROCEED
         </CustomButton>
-        <CustomButton onClick={() => {
+        <CustomButton inverted onClick={() => {
             dispatch(clearWorkout());
             dispatch(toggleDropdownHidden());
             }}>CLEAR

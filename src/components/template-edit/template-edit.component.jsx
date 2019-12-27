@@ -119,8 +119,8 @@ class TemplateEdit extends React.Component {
                         <span>Save template and go back to templates</span>
                     </div>
                     <div className='action'>
-                        <CustomButton onClick={() => this.discardAndBack()}>DISCARD</CustomButton>
-                        <span>Discard template and go back to templates</span>
+                        <CustomButton inverted onClick={() => this.discardAndBack()}>DISCARD</CustomButton>
+                        <span>Discard changes and go back to templates</span>
                     </div>
                 </div>
             </div>
