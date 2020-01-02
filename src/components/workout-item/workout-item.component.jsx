@@ -30,7 +30,7 @@ class WorkoutItem extends React.Component {
                         exercises.reduce((accumulator, object) => 
                             accumulator + object.sets.reduce((accumulator, object) => 
                                 accumulator + parseInt(object.weight, 10), 0), 0)
-                        }, Duration: {time}</h3>
+                        }, Duration: {time} min</h3>
                 </div>
             </div>
         )

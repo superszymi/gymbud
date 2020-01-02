@@ -56,7 +56,7 @@ class WorkoutDetails extends React.Component {
             <div className='workout-details'>
                 <h1>{workout ? workout.workoutName : '...'}</h1>
                 {
-                    workout ? workout.exercises.map(({ id, ...otherProps }) => <WorkoutExercise key={id} id={id} onChange={this.handleExerciseChange} {...otherProps} />) : '...'
+                    workout ? workout.exercises.map(({ id, ...otherProps }) => <WorkoutExercise key={id} id={id} onChange={this.handleExerciseChange} expanded={true} {...otherProps} />) : '...'
                 }
                 <div className='actions'>
                     <CustomButton onClick={this.saveWorkout} >SAVE</CustomButton>

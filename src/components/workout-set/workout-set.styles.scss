@@ -1,0 +1,14 @@
+.workout-set {
+    display: flex;
+    align-items: baseline;
+
+    .set-number {
+        margin-right: 10px;
+    }
+
+    .set-input {
+        display: inline-block;
+        margin: 0 10px;
+    }
+}
+

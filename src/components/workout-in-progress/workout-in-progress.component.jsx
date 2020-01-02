@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import update from 'immutability-helper';
 
-import CurrentWorkoutExercise from '../current-workout-exercise/current-workout-exercise.component';
+import WorkoutExercise from '../workout-exercise/workout-exercise.component';
 import CustomButton from '../custom-button/custom-button.component';
 import WorkoutCompleted from '../workout-completed/workout-completed.component';
 
@@ -38,10 +38,10 @@ class WorkoutInProgress extends React.Component {
                     sets: exercise.sets ? new Array(exercise.sets).fill(0).map(() => ({
                         reps: '',
                         weight: ''
-                    })) : null 
+                    })) : null
                 }),
                 date: new Date().toLocaleString(),
-                time: 0,
+                time: new Date().getMilliseconds(),
                 user: firestore.doc(`/users/${currentUser.id}`)
             }
             if(!props.currentWorkout) {
@@ -62,9 +62,10 @@ class WorkoutInProgress extends React.Component {
     }
 
     completeWorkout = () => {
+        const milis = new Date().getMilliseconds();
         this.setState(
             {
-                workout: update(this.state.workout, {time: {$set: 10}}),
+                workout: update(this.state.workout, {time: {$set: (milis - this.state.workout.time)/60000 }}),
                 completed: true
             }, () => addDocumentToCollection('workouts', this.state.workout)
         );
@@ -84,7 +85,7 @@ class WorkoutInProgress extends React.Component {
             <div>
                 <h1>{workout ? workout.name : '...'}</h1>
                 {
-                    workout ? workout.exercises.map(({ id, ...otherProps }) => <CurrentWorkoutExercise key={id} id={id} onChange={this.handleExerciseChange} {...otherProps} />) : '...'
+                    workout ? workout.exercises.map(({ id, ...otherProps }) => <WorkoutExercise key={id} id={id} onChange={this.handleExerciseChange} expanded={false} {...otherProps} />) : '...'
                 }
                 <div className='actions'>
                     <CustomButton inverted onClick={() => this.completeWorkout()} >DONE</CustomButton>

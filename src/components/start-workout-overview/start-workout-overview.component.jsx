@@ -12,6 +12,7 @@ import CustomButton from '../custom-button/custom-button.component';
 const StartWorkoutOverview = ({ workoutTemplates, history }) => (
     <div className='start-workout-overview'>
         <h1>Choose workout template</h1>
+        <h4>Click start next to the workout you want to start</h4>
         {
             workoutTemplates ? workoutTemplates.map(({ id, ...otherProps }) => <StartWorkoutItem key={id} {...otherProps} />) : '...'
         }

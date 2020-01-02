@@ -2,6 +2,8 @@ import React from 'react';
 
 import FormInput from '../form-input/form-input.component';
 
+import './workout-set.styles.scss';
+
 class WorkoutSet extends React.Component {
     constructor(props) {
         super(props);
@@ -19,9 +21,14 @@ class WorkoutSet extends React.Component {
 
     render() {
         return (
-            <div>
-                <FormInput value={this.state.reps} onChange={this.handleChange} name='reps' label='Reps' />
-                <FormInput value={this.state.weight} onChange={this.handleChange} name='weight' label='Weight'/>
+            <div className='workout-set'>
+                <h3 className='set-number'>{this.props.index + 1}</h3>
+                <div className='set-input'>
+                    <FormInput value={this.state.reps} onChange={this.handleChange} name='reps' label='Reps' />
+                </div>
+                <div className='set-input'>
+                    <FormInput value={this.state.weight} onChange={this.handleChange} name='weight' label='Weight'/>
+                </div>
             </div>
         )
     }
