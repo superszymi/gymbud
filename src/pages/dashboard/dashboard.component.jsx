@@ -1,11 +1,14 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import CustomButton from '../../components/custom-button/custom-button.component';
 
+import { clearWorkout } from '../../redux/chosen-exercises/chosen-exercises-actions';
+
 import './dashboard.styles.scss'
 
-const DashboardPage = ({ currentUser, history }) => (
+const DashboardPage = ({ currentUser, history, clearWorkout }) => (
     <div className='dashboard'>
         <div className='content'>
             <div className='title'>
@@ -21,12 +24,20 @@ const DashboardPage = ({ currentUser, history }) => (
                 </div>
                 <span>OR</span>
                 <div className='action'>
-                    <CustomButton onClick={() => history.push('/atlas')}>CREATE WORKOUT</CustomButton>
+                    <CustomButton onClick={() => {
+                            clearWorkout();
+                            history.push('/atlas');
+                        }
+                    }>CREATE WORKOUT</CustomButton>
                     <span>Create a new reusable workout template</span>
                 </div>
             </div>
         </div>
     </div>
-)
+);
 
-export default withRouter(DashboardPage);
+const mapDispatchToProps = dispatch => ({
+    clearWorkout: () => dispatch(clearWorkout())
+})
+
+export default withRouter(connect(null, mapDispatchToProps)(DashboardPage));

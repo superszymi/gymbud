@@ -6,13 +6,14 @@ import { firestore, convertTemplatesSnapshotToMap } from '../../firebase/firebas
 import { updateTemplates } from '../../redux/workout-templates/workout-templates-actions';
 
 import TemplatesOverview from '../../components/templates-overview/templates-overview.component';
-import TemplateEdit from '../../components/template-edit/template-edit.component';
 import WithLoading from '../../components/with-loading/with-loading.component';
+import ReviewTemplate from '../../components/review-template/review-template.component';
 
 import './templates.styles.scss';
 
 const TemplatesOverviewWithLoading = WithLoading(TemplatesOverview);
-const TemplateEditWithLoading = WithLoading(TemplateEdit);
+//const TemplateEditWithLoading = WithLoading(TemplateEdit);
+const ReviewTemplateWithLoading = WithLoading(ReviewTemplate);
 
 class TemplatesPage extends React.Component {
     state = {
@@ -51,7 +52,7 @@ class TemplatesPage extends React.Component {
         return (
             <div className='templates'>
                 <Route exact path={`${match.path}`} render={props => <TemplatesOverviewWithLoading isLoading={loading} {...props} /> } />
-                <Route exact path={`${match.path}/:templateName`} render={props => <TemplateEditWithLoading isLoading={loading} {...props} /> } />
+                <Route exact path={`${match.path}/:templateName`} render={props => <ReviewTemplateWithLoading isLoading={loading} {...props} /> } />
             </div>
         )
     }

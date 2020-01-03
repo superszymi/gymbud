@@ -13,6 +13,11 @@ export const addExerciseSet = exercise => ({
     payload: exercise
 })
 
+export const addExercise = exercise => ({
+    type: ChosenExercisesActionTypes.ADD_EXERCISE,
+    payload: exercise
+})
+
 export const clearExercise = exercise => ({
     type: ChosenExercisesActionTypes.CLEAR_EXERCISE,
     payload: exercise

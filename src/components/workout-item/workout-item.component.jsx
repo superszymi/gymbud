@@ -20,17 +20,20 @@ class WorkoutItem extends React.Component {
         const { history } = this.props;
         return(
             <div className='workout-item'>
-                <h1>{workoutName} from {date.substring(0, 10)}</h1>
+                <h1>{workoutName} from {date.substring(0, 9)}</h1>
                 <div className='buttons'>
-                    <CustomButton onClick={() => history.push(`/workouts/${id}`)}>EDIT</CustomButton>
+                    <CustomButton onClick={() => history.push(`/workouts/${id}`)}>DETAILS</CustomButton>
                     <CustomButton inverted onClick={() => this.deleteWorkout(id)}>DELETE</CustomButton>
                 </div>
                 <div className='details'>
                     <h3>Weights lifted: {
-                        exercises.reduce((accumulator, object) => 
-                            accumulator + object.sets.reduce((accumulator, object) => 
-                                accumulator + parseInt(object.weight, 10), 0), 0)
-                        }, Duration: {time} min</h3>
+                        exercises.reduce((accumulator, exercise) => {
+                            if(exercise.type === 'weighted') {
+                                return accumulator + exercise.sets.reduce((accumulator, set) => accumulator + parseInt(set.weight, 10), 0)
+                            }
+                            return accumulator
+                    }, 0)
+                 } kg, Duration: {time} min</h3>
                 </div>
             </div>
         )

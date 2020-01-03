@@ -2,12 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import AtlasExerciseItem from '../atlas-exercise-item/atlas-exercise-item.component';
+import CustomButton from '../custom-button/custom-button.component';
 
 import { selectCategory } from '../../redux/atlas/atlas-selectors';
 
 import './atlas-category.styles.scss';
 
-const AtlasCategory = ({ category }) => {
+const AtlasCategory = ({ category, history }) => {
     return (
         <div className='atlas-category-container'>
             <h1>{category.title[0].toUpperCase() + category.title.slice(1)} exercises</h1>
@@ -18,6 +19,7 @@ const AtlasCategory = ({ category }) => {
                 <AtlasExerciseItem key={exercise.id} exercise={exercise} />)
             }
             </div>
+            <CustomButton inverted onClick={() => history.goBack()}>BACK</CustomButton>
         </div>
     )
 }

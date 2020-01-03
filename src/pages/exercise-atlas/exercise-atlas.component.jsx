@@ -38,7 +38,6 @@ class ExerciseAtlasPage extends React.Component {
 
     componentWillUnmount() {
         this.props.hideDropdown();
-        this.props.clearWorkout();
     }
 
     render() {

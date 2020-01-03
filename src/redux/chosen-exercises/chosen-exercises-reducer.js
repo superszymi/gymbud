@@ -3,6 +3,7 @@ import { addExerciseToChosenExercises, removeExerciseSetFromChosenExercises } fr
 
 const INITIAL_STATE = {
     workoutName: '',
+    id: '',
     hidden: true,
     exercises: []
 }
@@ -24,6 +25,11 @@ const chosenExercisesReducer = (state = INITIAL_STATE, action) => {
                 ...state,
                 exercises: addExerciseToChosenExercises(state.exercises, action.payload)
             }
+        case ChosenExercisesActionTypes.ADD_EXERCISE:
+            return {
+                ...state,
+                exercises: [...state.exercises, {...action.payload}]
+            }
         case ChosenExercisesActionTypes.CLEAR_EXERCISE:
             return {
                 ...state,
@@ -38,13 +44,15 @@ const chosenExercisesReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 workoutName: '',
+                id: '',
                 exercises: []
             }
         case ChosenExercisesActionTypes.UPDATE_EXERCISES:
             return {
                 ...state,
                 exercises: action.payload.exercises,
-                workoutName: action.payload.workoutName
+                workoutName: action.payload.workoutName,
+                id: action.payload.id
             }
         default:
             return state;

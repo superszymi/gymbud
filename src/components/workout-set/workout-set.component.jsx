@@ -26,9 +26,12 @@ class WorkoutSet extends React.Component {
                 <div className='set-input'>
                     <FormInput value={this.state.reps} onChange={this.handleChange} name='reps' label='Reps' />
                 </div>
-                <div className='set-input'>
-                    <FormInput value={this.state.weight} onChange={this.handleChange} name='weight' label='Weight'/>
-                </div>
+                {
+                    this.props.type === 'weighted' ? 
+                        <div className='set-input'>
+                            <FormInput value={this.state.weight} onChange={this.handleChange} name='weight' label='Weight'/>
+                        </div> : ''
+                }
             </div>
         )
     }

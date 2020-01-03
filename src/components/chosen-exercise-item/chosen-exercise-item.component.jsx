@@ -2,13 +2,17 @@ import React from 'react'
 
 import './chosen-exercise-item.styles.scss';
 
-const ChosenExerciseItem = ({ exercise: { name, sets } }) => (
+const ChosenExerciseItem = ({ exercise: { name, sets, type } }) => (
     <div className='chosen-exercise-item'>
         <p className='name'>{name}</p>
-        <p className='set-count'>{sets} {
-            sets === 1 ? 'set' : 'sets'
+        {
+            type !== 'aerobic' ? 
+                <p className='set-count'>{sets} {
+                    sets === 1 ? 'set' : 'sets'
+                }
+                </p> : ''
         }
-        </p>
+        
     </div>
 )
 

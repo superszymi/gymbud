@@ -3,9 +3,10 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
 
-import { firestore, addDocumentToCollection } from '../../firebase/firebase.utils';
-import { clearWorkout } from '../../redux/chosen-exercises/chosen-exercises-actions';
-import { selectChosenExercisesItems, selectChosenExercisesWorkoutName, selectChosenExercisesCount, selectChosenExercisesSetCount } from '../../redux/chosen-exercises/chosen-exercises-selectors';
+import { firestore, addDocumentToCollection, updateDocumentInCollection } from '../../firebase/firebase.utils';
+import { clearWorkout, updateExercises } from '../../redux/chosen-exercises/chosen-exercises-actions';
+import { selectChosenExercisesId, selectChosenExercisesItems, selectChosenExercisesWorkoutName, selectChosenExercisesCount, selectChosenExercisesSetCount } from '../../redux/chosen-exercises/chosen-exercises-selectors';
+import { selectCurrentUser } from '../../redux/user/user-selectors';
 
 import FormInput from '../form-input/form-input.component';
 import CustomButton from '../custom-button/custom-button.component';
@@ -15,26 +16,47 @@ import ReviewTemplateItem from '../review-template-item/review-template-item.com
 import './review-template.styles.scss';
 
 class ReviewTemplate extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
-            ...this.state,
-            workoutName: ''
+            id: '',
+            workoutName: '',
+            exercises: null
         }
     }
 
     static getDerivedStateFromProps(props, state) {
-        if(props.workoutName && props.workoutName !== state.workoutName) {
-            return props;
+        if(props.exercises && props.exercises !== state.exercises) {
+            if(!state.workoutName) {
+                return props
+            }
+            return ({
+                exercises: props.exercises
+            })
         }
         return null;
     }
 
     handleChange = event => {
         const { value, name } = event.target;
-        this.setState({ [name]: value });
+        this.setState({ 
+            [name]: value
+         });
     };
+
+    deleteExercise = exerciseToDelete => {
+        this.setState({
+            exercises: this.state.exercises.filter(exercise => exercise.id === exerciseToDelete.id)
+        })
+    }
+
+    addExercises = async () => {
+        const { history, updateExercises } = this.props;
+        const { id, workoutName, exercises } = this.state;
+        updateExercises({ id, workoutName, exercises })
+        history.push('/atlas');
+    }
 
     saveAndStart = () => {
         const { history } = this.props;
@@ -46,27 +68,26 @@ class ReviewTemplate extends React.Component {
     saveAndBack = () => {
         const { history } = this.props;
         this.addWorkoutTemplate();
-        history.push('/dashboard');
+        history.push('/templates');
     }
 
     discardAndBack = () => {
         const { history, clearWorkout } = this.props;
         clearWorkout();
-        history.push('/dashboard');
+        history.goBack();
     }
 
     addWorkoutTemplate = () => {
-        const { currentUser, chosenExercises } = this.props;
-        const { workoutName } = this.state;
-
-        const exercises = chosenExercises.map(({name, sets, id}) => ({name, sets, id}));
-        const user = firestore.doc(`/users/${currentUser.id}`)
-
-        addDocumentToCollection('workoutTemplates', { workoutName, user, exercises });
+        const { exercises, id, workoutName } = this.state;
+        const user = firestore.doc(`/users/${this.props.currentUser.id}`);
+        const chosenExercises = exercises.map(({name, sets, type, id}) => sets ? ({name, sets, type, id}) : ({name, type, id}));
+        console.log(chosenExercises);
+        id ? updateDocumentInCollection('workoutTemplates', { exercises: chosenExercises, user, workoutName, id }) : addDocumentToCollection('workoutTemplates', { exercises: chosenExercises, user, workoutName });
+        
     }
 
     render() {
-        const { chosenExercises, totalExercises, totalSets } = this.props;
+        const { exercises, totalExercises, totalSets } = this.state;
         return (
             <div className='review-template'>
                 <FormInput required onChange={this.handleChange} name='workoutName' label='Workout name' value={this.state.workoutName}/>
@@ -82,7 +103,7 @@ class ReviewTemplate extends React.Component {
                     </div>
                 </div>
                 {
-                    chosenExercises.map(exercise => <ReviewTemplateItem key={exercise.id} exercise={exercise} />)
+                    exercises.map((exercise, index) => <ReviewTemplateItem key={exercise.type === 'aerobic' ? exercise.id + index : exercise.id} exercise={exercise} />)
                 }
                 <div className='total'>
                     <span>Exercises: {totalExercises}</span>
@@ -90,16 +111,20 @@ class ReviewTemplate extends React.Component {
                 </div>
                 <div className='actions'>
                     <div className='action'>
+                        <CustomButton onClick={() => this.addExercises()}>ADD EXERCISES</CustomButton>
+                        <span>Add more exercises to the template</span>
+                    </div>
+                    <div className='action'>
                         <CustomButton onClick={() => this.saveAndStart()}>START WORKOUT</CustomButton>
                         <span>Save template and start workout now</span>
                     </div>
                     <div className='action'>
                         <CustomButton onClick={() => this.saveAndBack()}>SAVE WORKOUT</CustomButton>
-                        <span>Save template and go back to dashboard</span>
+                        <span>Save template and go back</span>
                     </div>
                     <div className='action'>
                         <CustomButton inverted onClick={() => this.discardAndBack()}>DISCARD</CustomButton>
-                        <span>Discard template and go back to dashboard</span>
+                        <span>Discard changes and go back</span>
                     </div>
                 </div>
             </div>
@@ -108,14 +133,17 @@ class ReviewTemplate extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    chosenExercises: selectChosenExercisesItems(state),
+    exercises: selectChosenExercisesItems(state),
     workoutName: selectChosenExercisesWorkoutName(state),
     totalExercises: selectChosenExercisesCount(state),
-    totalSets: selectChosenExercisesSetCount(state)
+    totalSets: selectChosenExercisesSetCount(state),
+    id: selectChosenExercisesId(state),
+    currentUser: selectCurrentUser(state)
 })
 
 const mapDispatchToProps = dispatch => ({
-    clearWorkout: () => dispatch(clearWorkout())
+    clearWorkout: () => dispatch(clearWorkout()),
+    updateExercises: exercises => dispatch(updateExercises(exercises))
 })
 
 export default compose(

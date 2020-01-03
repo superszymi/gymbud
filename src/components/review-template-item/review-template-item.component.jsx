@@ -5,15 +5,19 @@ import { clearExercise, addExerciseSet, removeExerciseSet } from '../../redux/ch
 
 import './review-template-item.styles.scss';
 
-const ReviewTemplateItem = ({ exercise, clearExercise, addExerciseSet, removeExerciseSet }) => {
+const ReviewTemplateItem = ({ exercise, clearExercise, addExerciseSet, removeExerciseSet, onDelete }) => {
     const { name, sets } = exercise;
     return(
         <div className='review-template-item'>
             <span className='name'>{name}</span>
-            <span className='sets'>
-                <div className='arrow' onClick={() => removeExerciseSet(exercise)}>&#10094;</div>
-                <span className='value'>{sets}</span>
-                <div className='arrow' onClick={() => addExerciseSet(exercise)}>&#10095;</div></span>
+            {
+                sets ? 
+                    <span className='sets'>
+                        <div className='arrow' onClick={() => removeExerciseSet(exercise)}>&#10094;</div>
+                        <span className='value'>{sets}</span>
+                        <div className='arrow' onClick={() => addExerciseSet(exercise)}>&#10095;</div>
+                    </span> : <span className='sets'></span>
+            }
             <div className='remove-button' onClick={() => clearExercise(exercise)}>&#10005;</div>
         </div>
     );

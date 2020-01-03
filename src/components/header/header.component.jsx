@@ -5,13 +5,13 @@ import { connect } from 'react-redux';
 import { ReactComponent as Logo } from '../../assets/muscles.svg';
 import { auth } from '../../firebase/firebase.utils';
 import { selectCurrentUser } from '../../redux/user/user-selectors';
-
+import { clearWorkout } from '../../redux/chosen-exercises/chosen-exercises-actions';
 
 import ChosenExercisesIcon from '../chosen-exercises-icon/chosen-exercises-icon.component';
 import ChosenExercisesDropdown from '../chosen-exercises-dropdown/chosen-exercises-dropdown.component';
 
 import './header.styles.scss';
-const Header = ({ currentUser, hidden, location, history }) => (
+const Header = ({ currentUser, hidden, location, history, clearWorkout }) => (
     <div className='header'>
         <Link className='logo-container' to='/'>
             <Logo className='logo'/>
@@ -28,9 +28,12 @@ const Header = ({ currentUser, hidden, location, history }) => (
                     <Link className='option' to='/templates'>
                         TEMPLATES
                     </Link>
-                    <Link className='option' to='/atlas'>
+                    <div className='option' onClick={() => {
+                        clearWorkout();
+                        history.push('/atlas');
+                    }}>
                         NEW TEMPLATE
-                    </Link>
+                    </div>
                     <Link className='option' to='/start-workout'>
                         START WORKOUT
                     </Link>
@@ -56,6 +59,10 @@ const Header = ({ currentUser, hidden, location, history }) => (
 const mapStateToProps = state => ({
     currentUser: selectCurrentUser(state),
     hidden: state.chosenExercises.hidden
+});
+
+const mapDispatchToProps = dispatch => ({
+    clearWorkout: () => dispatch(clearWorkout())
 })
 
-export default withRouter(connect(mapStateToProps)(Header));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));

@@ -16,13 +16,12 @@ const ChosenExercisesDropdown = ({ exercises, history, location, dispatch }) => 
         <div className='exercises'>
             {
                 exercises.length ? 
-                exercises.map((exercise) => <ChosenExerciseItem key={exercise.id} exercise={exercise} />)
+                exercises.map((exercise, index) => <ChosenExerciseItem key={exercise.type === 'aerobic' ? exercise.id + index : exercise.id} exercise={exercise} />)
                 : <span>Add exercises from atlas</span>
             }
         </div>
         <CustomButton onClick={() => {
             dispatch(toggleDropdownHidden());
-            console.log(location)
             history.push("/atlas/review-template")
             }}>PROCEED
         </CustomButton>

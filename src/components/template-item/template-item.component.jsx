@@ -1,11 +1,13 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import { firestore } from '../../firebase/firebase.utils';
 
 import CustomButton from '../custom-button/custom-button.component';
 
 import './template-item.styles.scss';
+import { updateExercises } from '../../redux/chosen-exercises/chosen-exercises-actions';
 
 class TemplateItem extends React.Component {
 
@@ -16,12 +18,16 @@ class TemplateItem extends React.Component {
     }
 
     render() {
-        const {id, workoutName, exercises, history } = this.props;
+        const {id, workoutName, exercises, history, updateExercises } = this.props;
         return (
             <div className='template-item'>
                 <h1>{workoutName ? workoutName : '...'}</h1>
                 <div className='buttons'>
-                    <CustomButton onClick={() => history.push(`/templates/${workoutName}`)}>EDIT</CustomButton>
+                    <CustomButton onClick={() => {
+                            updateExercises({ id, workoutName, exercises });
+                            history.push(`/templates/${workoutName}`);
+                        }
+                    }>DETAILS</CustomButton>
                     <CustomButton inverted onClick={() => this.deleteTemplate(id)}>DELETE</CustomButton>
                 </div>
                 <div className='details'>
@@ -36,4 +42,8 @@ class TemplateItem extends React.Component {
     }
 }
 
-export default withRouter(TemplateItem);
+const mapDispatchToProps = dispatch => ({
+    updateExercises: template => dispatch(updateExercises(template))
+})
+
+export default withRouter(connect(null, mapDispatchToProps)(TemplateItem));

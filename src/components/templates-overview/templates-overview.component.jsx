@@ -5,6 +5,7 @@ import { updateTemplates } from '../../redux/workout-templates/workout-templates
 import { selectWorkoutTemplatesMap } from '../../redux/workout-templates/workout-templates-selectors';
 
 import TemplateItem from '../template-item/template-item.component';
+import CustomButton from '../custom-button/custom-button.component';
 
 import './templates-overview.styles.scss';
 
@@ -15,7 +16,7 @@ class TemplatesOverview extends React.Component {
     }
 
     render() {
-        const { workoutTemplates } = this.props;
+        const { workoutTemplates, history } = this.props;
         return (
             <div className='templates-overview'>
                 <h1>Manage your workout templates</h1>
@@ -23,6 +24,7 @@ class TemplatesOverview extends React.Component {
                 {
                     workoutTemplates ? workoutTemplates.map(({ id, ...otherProps }) => <TemplateItem key={id} id={id} {...otherProps} handleTemplateDelete={this.deleteTemplate} />) : '...'
                 }
+                <CustomButton inverted onClick={() => history.push('/dashboard')}>BACK</CustomButton>
             </div>
         )
     }

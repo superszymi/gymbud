@@ -45,7 +45,6 @@ class StartWorkoutPage extends React.Component {
     }
 
     render() {
-        console.log(this.props);
         const { match } = this.props;
         const { loading } = this.state;
         return (

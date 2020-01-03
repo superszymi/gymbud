@@ -20,5 +20,10 @@ export const selectChosenExercisesCount = createSelector(
 export const selectChosenExercisesSetCount = createSelector(
     [selectChosenExercisesItems],
     exercises => exercises.reduce((accumulator, currentObject) => 
-    accumulator + currentObject.sets, 0)
+    currentObject.sets ? accumulator + currentObject.sets : accumulator, 0)
+)
+
+export const selectChosenExercisesId = createSelector(
+    [selectChosenExercises],
+    exercises => exercises.id
 )

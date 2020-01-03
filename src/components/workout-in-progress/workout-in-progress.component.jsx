@@ -29,19 +29,33 @@ class WorkoutInProgress extends React.Component {
     static getDerivedStateFromProps(props, state) {
         if(props.workoutTemplate && props.currentUser && props.updateCurrentWorkout && !state.workout) {
             const { workoutTemplate: { workoutName, exercises }, updateCurrentWorkout, currentUser } = props;
-
             const workoutToAdd = {
                 workoutName: workoutName,
-                exercises: exercises.map(exercise => exercise = {
-                    id: exercise.id,
-                    name: exercise.name,
-                    sets: exercise.sets ? new Array(exercise.sets).fill(0).map(() => ({
-                        reps: '',
-                        weight: ''
-                    })) : null
+                exercises: exercises.map(exercise => {
+                    if(exercise.type === 'aerobic') {
+                        return {
+                            id: exercise.id,
+                            name: exercise.name,
+                            type: exercise.type,
+                            averageHeartRate: '',
+                            duration: ''
+                        }
+                    } else {
+                        return {
+                            id: exercise.id,
+                            name: exercise.name,
+                            type: exercise.type,
+                            sets: new Array(exercise.sets).fill(0).map(() => exercise.type === 'weighted' ? ({
+                                reps: '',
+                                weight: ''
+                            }) : ({
+                                reps: ''
+                            }))
+                        }
+                    }
                 }),
                 date: new Date().toLocaleString(),
-                time: new Date().getMilliseconds(),
+                time: new Date(),
                 user: firestore.doc(`/users/${currentUser.id}`)
             }
             if(!props.currentWorkout) {
@@ -62,20 +76,25 @@ class WorkoutInProgress extends React.Component {
     }
 
     completeWorkout = () => {
-        const milis = new Date().getMilliseconds();
+        const finished = new Date();
         this.setState(
             {
-                workout: update(this.state.workout, {time: {$set: (milis - this.state.workout.time)/60000 }}),
+                workout: update(this.state.workout, {time: {$set: Math.round((finished - this.state.workout.time)/60000) }}),
                 completed: true
-            }, () => addDocumentToCollection('workouts', this.state.workout)
+            }, () => {
+                addDocumentToCollection('workouts', this.state.workout)
+            }
         );
     }
 
-    handleExerciseChange = (id, sets) => {
+    handleExerciseChange = (id, value) => {
         const { exercises } = this.state.workout;
         const index = exercises.indexOf(exercises.find(exercise => exercise.id === id));
+        id > 800 && id < 900 ? 
         this.setState({
-            workout: update(this.state.workout, {exercises: {[index]: {sets: {$set: sets}}}})
+            workout: update(this.state.workout, {exercises: {[index]: {[value.name]: {$set: value.value}}}})
+        }, () => this.props.updateCurrentWorkout(this.state.workout)) : this.setState({
+            workout: update(this.state.workout, {exercises: {[index]: {sets: {$set: value}}}})
         }, () => this.props.updateCurrentWorkout(this.state.workout));
     }
 
@@ -83,9 +102,9 @@ class WorkoutInProgress extends React.Component {
         const { workout, completed } = this.state;
         return (
             <div>
-                <h1>{workout ? workout.name : '...'}</h1>
+                <h1>{workout.workoutName}</h1>
                 {
-                    workout ? workout.exercises.map(({ id, ...otherProps }) => <WorkoutExercise key={id} id={id} onChange={this.handleExerciseChange} expanded={false} {...otherProps} />) : '...'
+                    workout.exercises.map(({ id, ...otherProps }) => <WorkoutExercise key={id} id={id} onChange={this.handleExerciseChange} expanded={false} {...otherProps} />)
                 }
                 <div className='actions'>
                     <CustomButton inverted onClick={() => this.completeWorkout()} >DONE</CustomButton>

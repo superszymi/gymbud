@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import WorkoutItem from '../workout-item/workout-item.component';
+import CustomButton from '../custom-button/custom-button.component';
 
 import { updateWorkouts } from '../../redux/workouts/workouts-actions';
 import { selectWorkoutsMap } from '../../redux/workouts/workouts-selectors';
@@ -15,7 +16,7 @@ class WorkoutList extends React.Component {
     }
 
     render() {
-        const { workouts } = this.props;
+        const { workouts, history } = this.props;
         return(
             <div className='workout-list'>
                 <h1>Your past workouts</h1>
@@ -23,6 +24,7 @@ class WorkoutList extends React.Component {
                 {
                     workouts ? workouts.map(workout => <WorkoutItem key={workout.id} workout={workout} handleWorkoutDelete={this.deleteWorkout}/>) : '...'
                 }
+                <CustomButton inverted onClick={() => history.push('/dashboard')}>BACK</CustomButton>
             </div>
         )
     }
