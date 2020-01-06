@@ -22,7 +22,11 @@ class WorkoutInProgress extends React.Component {
 
         this.state = {
             workout: null,
-            completed: false
+            completed: false,
+            hours: 0,
+            minutes: 0,
+            seconds: 0,
+            timerRunning: true
         }
     }
 
@@ -54,8 +58,8 @@ class WorkoutInProgress extends React.Component {
                         }
                     }
                 }),
-                date: new Date().toLocaleString(),
-                time: new Date(),
+                date: new Date(),
+                time: 0,
                 user: firestore.doc(`/users/${currentUser.id}`)
             }
             if(!props.currentWorkout) {
@@ -71,15 +75,54 @@ class WorkoutInProgress extends React.Component {
         return null;
     }
 
+    componentDidMount() {
+        this.interval = setInterval(this.tick, 1000);
+    }
+
     componentWillUnmount() {
         this.props.clearCurrentWorkout();
+        clearInterval(this.interval);
+    }
+
+    tick = () => {
+        var seconds = this.state.seconds;
+        var minutes = this.state.minutes;
+        var hours= this.state.hours;
+
+        if(seconds + 1 >= 60) {
+            seconds = 0;
+            if(minutes + 1 >= 60) {
+                minutes = 0;
+                hours = hours + 1;
+            } else {
+                minutes = minutes + 1;
+            }
+        } else {
+            seconds = seconds + 1
+        }
+
+        this.setState({
+            seconds: seconds,
+            minutes: minutes,
+            hours: hours
+        })
+    }
+
+    toggleTimer = () => {
+        if(this.state.timerRunning) {
+            clearInterval(this.interval)
+        } else {
+            this.interval = setInterval(this.tick, 1000)
+        }
+        this.setState({
+            timerRunning: !this.state.timerRunning
+        })
     }
 
     completeWorkout = () => {
-        const finished = new Date();
         this.setState(
             {
-                workout: update(this.state.workout, {time: {$set: Math.round((finished - this.state.workout.time)/60000) }}),
+                workout: update(this.state.workout, {time: {$set: this.state.minutes }}),
                 completed: true
             }, () => {
                 addDocumentToCollection('workouts', this.state.workout)
@@ -99,10 +142,20 @@ class WorkoutInProgress extends React.Component {
     }
 
     render() {
-        const { workout, completed } = this.state;
+        const { workout, completed, seconds, minutes, hours, timerRunning } = this.state;
         return (
             <div>
                 <h1>{workout.workoutName}</h1>
+                <h2>Time elapsed: 
+                    <span className='time'>
+                        {hours < 10 ? `0${hours}` : hours}:
+                        {minutes < 10 ? `0${minutes}` : minutes}:
+                        {seconds < 10 ? `0${seconds}` : seconds}
+                    </span>
+                    <span className='timer-button' onClick={() => this.toggleTimer()}>
+                        {timerRunning ? <span className='pause-button'>&#10074;&#10074;</span> : <span className='play-button'>&#9658;</span>}
+                    </span>
+                </h2>
                 {
                     workout.exercises.map(({ id, ...otherProps }) => <WorkoutExercise key={id} id={id} onChange={this.handleExerciseChange} expanded={false} {...otherProps} />)
                 }

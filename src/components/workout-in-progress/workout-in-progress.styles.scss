@@ -4,3 +4,27 @@
         margin: 0 10px;
     }
 }
+
+.time {
+    display: inline-block;
+    width: 120px;
+}
+
+.timer-button {
+    display: inline-block;
+    vertical-align: middle;
+    width: 60px;
+    height: 30px;
+    box-shadow: inset -1px 0 0 black, inset 0 -1px 0 black, inset 1px 0 0 black, inset 0 1px 0 black;
+    cursor: pointer;
+
+    &:hover {
+        box-shadow: none;
+        background-color: black;
+        color: white;
+    }
+
+    .pause-button {
+        line-height: 1.2px;
+    }
+}

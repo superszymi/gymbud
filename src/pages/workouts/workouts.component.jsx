@@ -33,7 +33,7 @@ class WorkoutsPage extends React.Component {
         if(!this.props.currentUser || !this.props.updateWorkouts) return null;
 
         const { updateWorkouts, currentUser } = this.props;
-        const workoutsRef = firestore.collection('workouts').where('user', '==', firestore.doc(`/users/${currentUser.id}`));
+        const workoutsRef = firestore.collection('workouts').where('user', '==', firestore.doc(`/users/${currentUser.id}`)).orderBy('date', 'desc');
         this.unsubscribeFromSnapshot = workoutsRef.get().then(snapshot => {
             const workoutsMap = convertWorkoutsSnapshotToMap(snapshot);
             updateWorkouts(workoutsMap);
