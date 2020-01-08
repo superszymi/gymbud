@@ -28,3 +28,28 @@
         }
     }
 }
+
+@media screen and (max-width: 650px) {
+    .dashboard {
+        .content {
+            width: 100%;
+
+            .title {
+                .action {
+                    width: 60%;
+
+                    span {
+                        font-size: 14px;
+                        width: 100%;
+                    }
+                }
+                
+                .or {
+                    display: block;
+                    font-weight: bold;
+                    margin: 10px 0;
+                }
+            }
+        }
+    }
+}

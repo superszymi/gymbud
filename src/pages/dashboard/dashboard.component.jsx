@@ -22,7 +22,7 @@ const DashboardPage = ({ currentUser, history, clearWorkout }) => (
                     <CustomButton onClick={() => history.push('/start-workout')}>START WORKOUT</CustomButton>
                     <span>Start one of your saved workouts</span>
                 </div>
-                <span>OR</span>
+                <span className='or'>OR</span>
                 <div className='action'>
                     <CustomButton onClick={() => {
                             clearWorkout();

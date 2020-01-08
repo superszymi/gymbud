@@ -3,12 +3,19 @@
     height: 100px;
     width: 100%;
     display: flex;
+    align-items: center;
     justify-content: space-between;
 
     .logo-container {
+        display: flex;
+        align-items: center;
         height: 100%;
         width: 70px;
-        padding: 20px;
+        padding: 5px;
+
+        .header-logo {
+            display: block;
+        }
     }
 
     .options {
@@ -28,6 +35,23 @@
         .option {
             padding: 10px 15px;
             cursor: pointer;
+        }
+
+        .toggle-items-button {
+            font-size: x-large;
+            font-weight: bold;
+        }
+    }
+}
+
+@media screen and (max-width: 900px) {
+
+    .header {
+        height: 50px;
+
+        .logo-container {
+            margin-left: 10px;
+            width: 40px;
         }
     }
 }
