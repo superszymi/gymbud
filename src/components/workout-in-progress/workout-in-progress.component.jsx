@@ -144,7 +144,7 @@ class WorkoutInProgress extends React.Component {
     render() {
         const { workout, completed, seconds, minutes, hours, timerRunning } = this.state;
         return (
-            <div>
+            <div className='workout-in-progress'>
                 <h1>{workout.workoutName}</h1>
                 <h2>Time elapsed: 
                     <span className='time'>

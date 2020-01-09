@@ -23,7 +23,7 @@ class AerobicExercise extends React.Component {
         return(
             <div className='aerobic-exercise'>
                 <div className='aerobic-exercise-input'>
-                    <FormInput type='number' value={this.state.averageHeartRate} onChange={this.handleChange} name='averageHeartRate' label='Average heart rate' />
+                    <FormInput type='number' value={this.state.averageHeartRate} onChange={this.handleChange} name='averageHeartRate' label='Heart rate' />
                 </div>
                 <div className='aerobic-exercise-input'>
                     <FormInput type='number' value={this.state.duration} onChange={this.handleChange} name='duration' label='Duration' />

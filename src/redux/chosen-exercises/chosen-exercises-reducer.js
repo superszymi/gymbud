@@ -23,12 +23,14 @@ const chosenExercisesReducer = (state = INITIAL_STATE, action) => {
         case ChosenExercisesActionTypes.ADD_EXERCISE_SET:
             return {
                 ...state,
-                exercises: addExerciseToChosenExercises(state.exercises, action.payload)
+                exercises: addExerciseToChosenExercises(state.exercises, action.payload),
+                hidden: state.exercises.length ? state.hidden : false
             }
         case ChosenExercisesActionTypes.ADD_EXERCISE:
             return {
                 ...state,
-                exercises: [...state.exercises, {...action.payload}]
+                exercises: [...state.exercises, {...action.payload}],
+                hidden: state.exercises.length ? state.hidden : false
             }
         case ChosenExercisesActionTypes.CLEAR_EXERCISE:
             return {

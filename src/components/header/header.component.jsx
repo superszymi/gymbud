@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { ReactComponent as Logo } from '../../assets/muscles.svg';
 import { auth } from '../../firebase/firebase.utils';
 import { selectCurrentUser } from '../../redux/user/user-selectors';
-import { clearWorkout } from '../../redux/chosen-exercises/chosen-exercises-actions';
+import { clearWorkout, hideDropdown } from '../../redux/chosen-exercises/chosen-exercises-actions';
 
 import ChosenExercisesIcon from '../chosen-exercises-icon/chosen-exercises-icon.component';
 import ChosenExercisesDropdown from '../chosen-exercises-dropdown/chosen-exercises-dropdown.component';
@@ -25,7 +25,15 @@ class Header extends React.Component {
 
     componentDidMount() {
         window.addEventListener('resize', this.handleResize);
+    }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.location !== prevProps.location) {
+            this.setState({
+                showItems: false
+            })
+            this.props.hideDropdown();
+        }
     }
 
     componentWillUnmount() {
@@ -34,7 +42,8 @@ class Header extends React.Component {
 
     handleResize = () => {
         this.setState({
-            width: window.innerWidth
+            width: window.innerWidth,
+            showItems: window.innerWidth >= 940 ? false : this.state.showItems
         })
     }
 
@@ -52,10 +61,13 @@ class Header extends React.Component {
                     <Logo className='header-logo'/>
                 </Link>
                 {
-                    this.state.width <= 900 ? 
+                    this.state.width <= 940 ? 
                         <div className='options' >
+                            {
+                                location.pathname.includes('atlas') && !location.pathname.includes('review') ? <ChosenExercisesIcon /> : null
+                            }
                             <span className='toggle-items-button' onClick={this.toggleItems}>&#8801;</span>
-                        </div> 
+                        </div>
                         : 
                         <div className='options'>
                         { currentUser ? (
@@ -79,7 +91,7 @@ class Header extends React.Component {
                                     START WORKOUT
                                 </Link>
                                 {
-                                    location.pathname.includes('atlas') ? <ChosenExercisesIcon /> : null
+                                    location.pathname.includes('atlas') && !location.pathname.includes('review') ? <ChosenExercisesIcon /> : null
                                 }
                             </div>
                         ) : null
@@ -91,13 +103,12 @@ class Header extends React.Component {
                             <Link className='option' to='/sign-in'>SIGN IN</Link>
                         }
                     </div>
-
                 }
                 {
                     this.state.showItems ? (<HeaderDropdown currentUser={currentUser} clearWorkout={clearWorkout} />) : null
                 }
                 {
-                    hidden ? null : (<ChosenExercisesDropdown />)
+                    hidden ? null : (<ChosenExercisesDropdown offset={this.state.showItems} />)
                 }
             </div>
         )
@@ -111,7 +122,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    clearWorkout: () => dispatch(clearWorkout())
+    clearWorkout: () => dispatch(clearWorkout()),
+    hideDropdown: () => dispatch(hideDropdown())
 })
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));

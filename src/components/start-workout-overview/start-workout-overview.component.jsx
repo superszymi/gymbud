@@ -17,7 +17,7 @@ const StartWorkoutOverview = ({ workoutTemplates, history }) => (
             workoutTemplates ? workoutTemplates.map(({ id, ...otherProps }) => <StartWorkoutItem key={id} {...otherProps} />) : '...'
         }
         <h2>...or create a new one</h2>
-        <div className='actions'>
+        <div className='start-workout-actions'>
             <CustomButton onClick={() => history.push('/atlas')}>NEW TEMPLATE</CustomButton>
             <CustomButton inverted onClick={() => history.push('/dashboard')}>BACK</CustomButton>
         </div>

@@ -11,8 +11,8 @@ import { selectChosenExercisesItems } from '../../redux/chosen-exercises/chosen-
 
 import './chosen-exercises-dropdown.styles.scss';
 
-const ChosenExercisesDropdown = ({ exercises, history, location, dispatch }) => (
-    <div className='chosen-exercises-dropdown'>
+const ChosenExercisesDropdown = ({ exercises, history, location, dispatch, offset }) => (
+    <div className={`${offset ? 'offset' : ''} chosen-exercises-dropdown`}>
         <div className='exercises'>
             {
                 exercises.length ? 

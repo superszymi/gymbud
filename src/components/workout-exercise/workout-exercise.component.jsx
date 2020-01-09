@@ -64,7 +64,7 @@ class WorkoutExercise extends React.Component {
         const { name, type } = this.props;
         const { sets, expanded, setsCompleted, averageHeartRate, duration } = this.state;
         return (
-            <div>
+            <div className='workout-exercise'>
                 <h3>{name} { sets ? '(' + setsCompleted + '/' + sets.length + ')' : '' } {expanded ? <span className='expand-button' onClick={() => this.toggleExpand()}>&#9660;</span> : 
                     <span className='expand-button' onClick={() => this.toggleExpand()}>&#9654;</span>} </h3>
                 {

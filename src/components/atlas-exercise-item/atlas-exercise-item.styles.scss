@@ -24,3 +24,9 @@
         }
     }
   }
+
+  @media screen and (max-width: 480px) {
+    .exercise-item {
+        width: 100%;
+    }
+}

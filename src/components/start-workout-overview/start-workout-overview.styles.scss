@@ -1,7 +1,30 @@
 .start-workout-overview {
-    width: 70%;
+    text-align: center;
+    width: 50%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    .start-workout-actions {
+        .custom-button {
+            margin: 5px 10px;
+        }
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    .start-workout-overview {
+        width: 70%;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .start-workout-overview {
+        width: 90%;
+
+        h2 {
+            font-size: x-large;
+        }
+    }
 }

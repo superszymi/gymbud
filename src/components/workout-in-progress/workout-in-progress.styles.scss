@@ -1,30 +1,41 @@
-.actions {
+.workout-in-progress {
+    width: 100%;
 
-    .custom-button {
-        margin: 0 10px;
+    .actions {
+        margin-top: 10px;
+
+        .custom-button {
+            margin: 5px 10px;
+        }
+    }
+
+    .time {
+        display: inline-block;
+        width: 120px;
+    }
+
+    .timer-button {
+        display: inline-block;
+        vertical-align: middle;
+        width: 60px;
+        height: 30px;
+        box-shadow: inset -1px 0 0 black, inset 0 -1px 0 black, inset 1px 0 0 black, inset 0 1px 0 black;
+        cursor: pointer;
+
+        &:hover {
+            box-shadow: none;
+            background-color: black;
+            color: white;
+        }
+
+        .pause-button {
+            line-height: 1.2px;
+        }
     }
 }
 
-.time {
-    display: inline-block;
-    width: 120px;
-}
-
-.timer-button {
-    display: inline-block;
-    vertical-align: middle;
-    width: 60px;
-    height: 30px;
-    box-shadow: inset -1px 0 0 black, inset 0 -1px 0 black, inset 1px 0 0 black, inset 0 1px 0 black;
-    cursor: pointer;
-
-    &:hover {
-        box-shadow: none;
-        background-color: black;
-        color: white;
-    }
-
-    .pause-button {
-        line-height: 1.2px;
+@media screen and (max-width: 600px) {
+    .workout-in-progress {
+        width: 90%;
     }
 }

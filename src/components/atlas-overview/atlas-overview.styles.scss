@@ -1,4 +1,5 @@
 .atlas-overview-container {
+    text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -8,5 +9,13 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .atlas-overview-container {
+        .atlas-overview {
+            width: 100%;
+        }
     }
 }

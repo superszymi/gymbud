@@ -4,18 +4,18 @@
     min-height: 100px;
     border-bottom: 1px solid darkgrey;
     padding: 15px 0;
-    font-size: 20px;
+    font-size: large;
     align-items: center;
   
-    .name,
-    .sets {
-      width: 45%;
+    .name, .sets, .remove-button {
+      width: 33%;
     }
 
     .sets {
-      display: flex;
+      display: inline-block;
 
       .arrow {
+        display: inline;
         cursor: pointer;
       }
 
@@ -28,5 +28,13 @@
     .remove-button {
       padding-left: 12px;
       cursor: pointer;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .review-template-item {
+      .name {
+        font-size: medium;
+      }
     }
   }
