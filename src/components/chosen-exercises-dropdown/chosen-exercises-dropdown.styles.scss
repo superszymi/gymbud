@@ -1,7 +1,7 @@
 .chosen-exercises-dropdown {
     position: absolute;
     width: 240px;
-    height: 400px;
+    min-height: 260px;
     display: flex;
     flex-direction: column;
     padding: 20px;
@@ -16,14 +16,14 @@
     }
 
     .exercises {
-        height: 260px;
+        min-height: 160px;
         display: flex;
         flex-direction: column;
-        overflow: scroll;
         align-items: center;
     }
 
     .custom-button {
+        height: 30px;
         margin-top: 5px;
     }
 }
@@ -31,7 +31,6 @@
 @media screen and (max-width: 600px) {
     .chosen-exercises-dropdown {
         top: 60px;
-        height: 260px;
         font-size: small;
     }
 }

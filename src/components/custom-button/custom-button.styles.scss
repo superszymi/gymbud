@@ -1,9 +1,8 @@
 .custom-button {
-    min-width: 120px;
+    min-width: 100px;
     width: auto;
     height: 50px;
     letter-spacing: 0.5px;
-    padding: 0 20px 0 20px;
     font-size: 15px;
     background-color: black;
     color: white;
@@ -44,3 +43,11 @@
       }
     }
   }
+
+@media screen and (max-width: 450px) {
+  .custom-button {
+    &.google-sign-in {
+      font-size: smaller;
+    }
+  }
+}

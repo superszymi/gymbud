@@ -21,7 +21,7 @@ class WorkoutItem extends React.Component {
         return(
             <div className='workout-item'>
                 <h1>{workoutName}</h1>
-                <span className='workout-item-from'>from {date.toDate().toLocaleString().substring(0, 9)}</span>
+                <span className='workout-item-from'>from {date.toDate().toLocaleString().substring(0, date.toDate().toLocaleString().indexOf(','))}</span>
                 <div className='buttons'>
                     <CustomButton onClick={() => history.push(`/workouts/${id}`)}>DETAILS</CustomButton>
                     <CustomButton inverted onClick={() => this.deleteWorkout(id)}>DELETE</CustomButton>
@@ -45,7 +45,7 @@ class WorkoutItem extends React.Component {
                         : ''
                         }
                         <span>
-                            {' '}Duration: {time} min
+                            &nbsp;Duration: {time} min
                         </span>
                     </h3>
                 </div>

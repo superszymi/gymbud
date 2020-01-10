@@ -30,6 +30,7 @@
     }
 
     .details {
+        width: 100%;
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
@@ -37,6 +38,11 @@
         margin: 10px 0;
 
         h3 {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            
             span {
                 white-space: nowrap;
             }

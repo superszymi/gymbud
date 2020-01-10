@@ -1,11 +1,20 @@
 .chosen-exercise-item {
+    text-align: center;
     width: 90%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    line-height: 1px;
-    height: 60px;
     margin-bottom: 15px;
     border: 1px solid black;
+
+    .name {
+        margin: 5px 0;
+        width: 90%;
+        white-space: pre-wrap;
+    }
+
+    .set-count {
+        margin: 5px 0;
+    }
 }

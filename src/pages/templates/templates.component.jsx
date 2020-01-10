@@ -12,7 +12,6 @@ import ReviewTemplate from '../../components/review-template/review-template.com
 import './templates.styles.scss';
 
 const TemplatesOverviewWithLoading = WithLoading(TemplatesOverview);
-//const TemplateEditWithLoading = WithLoading(TemplateEdit);
 const ReviewTemplateWithLoading = WithLoading(ReviewTemplate);
 
 class TemplatesPage extends React.Component {

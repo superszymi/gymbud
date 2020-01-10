@@ -26,3 +26,11 @@
         }
     }
 }
+
+@media screen and (max-width: 600px) {
+    .homepage {
+        .title {
+            width: 80%;
+        }
+    }
+}

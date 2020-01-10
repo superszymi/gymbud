@@ -57,9 +57,34 @@
     }
 }
 
+.review-popup {
+    position: absolute;
+    width: 30%;
+    height: 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    background-color: rgba(255,255,255, 1);
+
+    h3 {
+      margin: 20px 20px;
+    }
+  }
+
 @media screen and (max-width: 600px) {
     .review-template {
         width: 90%;
+    }
+
+    .review-popup {
+        width: 80%;
     }
 }
 

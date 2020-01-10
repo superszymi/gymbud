@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/static/css/main.a4b75ef3.chunk.css",
+    "main.js": "/static/js/main.22737741.chunk.js",
+    "main.js.map": "/static/js/main.22737741.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.b8e7f38e.js",
+    "runtime-main.js.map": "/static/js/runtime-main.b8e7f38e.js.map",
+    "static/js/2.7f51720a.chunk.js": "/static/js/2.7f51720a.chunk.js",
+    "static/js/2.7f51720a.chunk.js.map": "/static/js/2.7f51720a.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.6c2d7013d07359839b3104bce95cbcab.js": "/precache-manifest.6c2d7013d07359839b3104bce95cbcab.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/main.a4b75ef3.chunk.css.map": "/static/css/main.a4b75ef3.chunk.css.map",
+    "static/js/2.7f51720a.chunk.js.LICENSE": "/static/js/2.7f51720a.chunk.js.LICENSE",
+    "static/media/dumbbell.204491ea.svg": "/static/media/dumbbell.204491ea.svg",
+    "static/media/muscles.91015352.svg": "/static/media/muscles.91015352.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.b8e7f38e.js",
+    "static/js/2.7f51720a.chunk.js",
+    "static/css/main.a4b75ef3.chunk.css",
+    "static/js/main.22737741.chunk.js"
+  ]
+}

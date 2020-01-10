@@ -10,6 +10,7 @@ import { selectCurrentUser } from '../../redux/user/user-selectors';
 
 import FormInput from '../form-input/form-input.component';
 import CustomButton from '../custom-button/custom-button.component';
+import WorkoutCompleted from '../workout-completed/workout-completed.component';
 
 import ReviewTemplateItem from '../review-template-item/review-template-item.component';
 
@@ -22,7 +23,9 @@ class ReviewTemplate extends React.Component {
         this.state = {
             id: '',
             workoutName: '',
-            exercises: null
+            exercises: null,
+            start: null,
+            noExercises: false
         }
     }
 
@@ -82,52 +85,78 @@ class ReviewTemplate extends React.Component {
         const user = firestore.doc(`/users/${this.props.currentUser.id}`);
         const chosenExercises = exercises.map(({name, sets, type, id}) => sets ? ({name, sets, type, id}) : ({name, type, id}));
         console.log(chosenExercises);
-        id ? updateDocumentInCollection('workoutTemplates', { exercises: chosenExercises, user, workoutName, id }) : addDocumentToCollection('workoutTemplates', { exercises: chosenExercises, user, workoutName });
-        
+        id ? updateDocumentInCollection('workoutTemplates', { exercises: chosenExercises, user, workoutName, id }) : addDocumentToCollection('workoutTemplates', { exercises: chosenExercises, user, workoutName });   
+    }
+
+    handleSubmit = event => {
+        event.preventDefault();
+        if(!this.state.exercises.length) {
+            this.setState({noExercises: true});
+            return null;
+        }
+        if(this.state.start === true) {
+            this.saveAndStart()
+        } else if (this.state.start === false) {
+            this.saveAndBack()
+        }
     }
 
     render() {
-        const { exercises, totalExercises, totalSets } = this.state;
+        const { exercises, totalExercises, totalSets, noExercises } = this.state;
         return (
-            <div className='review-template'>
-                <FormInput required onChange={this.handleChange} name='workoutName' label='Workout name' value={this.state.workoutName}/>
-                <div className='review-template-header'>
-                    <div className='header-block'>
-                        <span>Exercise</span>
-                    </div>
-                    <div className='header-block'>
-                        <span>Sets</span>
-                    </div>
-                    <div className='header-block'>
-                        <span>Actions</span>
-                    </div>
-                </div>
+            <div>
                 {
-                    exercises.map((exercise, index) => <ReviewTemplateItem key={exercise.type === 'aerobic' ? exercise.id + index : exercise.id} exercise={exercise} />)
+                    noExercises ? 
+                    <div className='review-popup'>
+                        <div className='review-popup-inner'>
+                            <h3>Workout must have at least one exercise!</h3>
+                            <CustomButton onClick={() => this.setState({noExercises: false})}>OK</CustomButton>
+                        </div>
+                    </div> : 
+                    <div className='review-template'>
+                        <form onSubmit={this.handleSubmit} id="review-template-form">
+                            <FormInput required onChange={this.handleChange} name='workoutName' label='Workout name' value={this.state.workoutName}/>
+                        </form>
+                        <div className='review-template-header'>
+                            <div className='header-block'>
+                                <span>Exercise</span>
+                            </div>
+                            <div className='header-block'>
+                                <span>Sets</span>
+                            </div>
+                            <div className='header-block'>
+                                <span>Actions</span>
+                            </div>
+                        </div>
+                        {
+                            exercises.map((exercise, index) => <ReviewTemplateItem key={exercise.type === 'aerobic' ? exercise.id + index : exercise.id} exercise={exercise} />)
+                        }
+                        <div className='total'>
+                            <span>Exercises: {totalExercises}</span>
+                            <span>Total sets: {totalSets}</span>
+                        </div>
+                        <div className='actions'>
+                            <div className='action'>
+                                <CustomButton onClick={() => this.addExercises()}>ADD EXERCISES</CustomButton>
+                                <span>Add more exercises to the template</span>
+                            </div>
+                            <div className='action'>
+                                <CustomButton type='submit' form='review-template-form' onClick={() => this.setState({start: true})}>START WORKOUT</CustomButton>
+                                <span>Save template and start workout now</span>
+                            </div>
+                            <div className='action'>
+                                <CustomButton type='submit' form='review-template-form' onClick={() => this.setState({start: false})}>SAVE WORKOUT</CustomButton>
+                                <span>Save template and go back</span>
+                            </div>
+                            <div className='action'>
+                                <CustomButton inverted onClick={() => this.discardAndBack()}>DISCARD</CustomButton>
+                                <span>Discard changes and go back</span>
+                            </div>
+                        </div>
+                    </div>
                 }
-                <div className='total'>
-                    <span>Exercises: {totalExercises}</span>
-                    <span>Total sets: {totalSets}</span>
-                </div>
-                <div className='actions'>
-                    <div className='action'>
-                        <CustomButton onClick={() => this.addExercises()}>ADD EXERCISES</CustomButton>
-                        <span>Add more exercises to the template</span>
-                    </div>
-                    <div className='action'>
-                        <CustomButton onClick={() => this.saveAndStart()}>START WORKOUT</CustomButton>
-                        <span>Save template and start workout now</span>
-                    </div>
-                    <div className='action'>
-                        <CustomButton onClick={() => this.saveAndBack()}>SAVE WORKOUT</CustomButton>
-                        <span>Save template and go back</span>
-                    </div>
-                    <div className='action'>
-                        <CustomButton inverted onClick={() => this.discardAndBack()}>DISCARD</CustomButton>
-                        <span>Discard changes and go back</span>
-                    </div>
-                </div>
             </div>
+            
         )
     }
 }
