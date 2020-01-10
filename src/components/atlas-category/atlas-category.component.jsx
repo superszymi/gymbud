@@ -19,7 +19,9 @@ const AtlasCategory = ({ category, history }) => {
                 <AtlasExerciseItem key={exercise.id} exercise={exercise} />)
             }
             </div>
-            <CustomButton inverted onClick={() => history.goBack()}>BACK</CustomButton>
+            <div className='back-button-container'>
+                <CustomButton inverted onClick={() => history.goBack()}>BACK</CustomButton>
+            </div>
         </div>
     )
 }

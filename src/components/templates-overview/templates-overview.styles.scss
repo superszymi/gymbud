@@ -5,6 +5,10 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    .custom-button {
+        margin-top: 10px;
+    }
 }
 
 @media screen and (max-width: 1000px) {

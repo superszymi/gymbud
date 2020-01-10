@@ -20,33 +20,34 @@ class WorkoutItem extends React.Component {
         const { history } = this.props;
         return(
             <div className='workout-item'>
-                <h1>{workoutName} from {date.toDate().toLocaleString().substring(0, 9)}</h1>
+                <h1>{workoutName}</h1>
+                <span className='workout-item-from'>from {date.toDate().toLocaleString().substring(0, 9)}</span>
                 <div className='buttons'>
                     <CustomButton onClick={() => history.push(`/workouts/${id}`)}>DETAILS</CustomButton>
                     <CustomButton inverted onClick={() => this.deleteWorkout(id)}>DELETE</CustomButton>
                 </div>
                 <div className='details'>
                     <h3>
-                    {
-                        exercises.find(exercise => exercise.type === 'weighted') ? 
+                        {
+                            exercises.find(exercise => exercise.type === 'weighted') ? 
+                            <span>
+                                Weights lifted: {
+                                    exercises.reduce((accumulator, exercise) => {
+                                        if(exercise.type === 'weighted') {
+                                            return accumulator + exercise.sets.reduce((accumulator, set) => {
+                                                return accumulator + parseInt(set.weight !== "" ? set.weight : 0, 10)
+                                            }, 0)
+                                        }
+                                        return accumulator
+                                    }, 0)
+                                } kg,
+                            </span> 
+                        : ''
+                        }
                         <span>
-                            Weights lifted: {
-                                exercises.reduce((accumulator, exercise) => {
-                                    if(exercise.type === 'weighted') {
-                                        return accumulator + exercise.sets.reduce((accumulator, set) => {
-                                            return accumulator + parseInt(set.weight !== "" ? set.weight : 0, 10)
-                                        }, 0)
-                                    }
-                                    return accumulator
-                                }, 0)
-                            } kg,
-                        </span> 
-                    : ''
-                    }
-                    <span>
-                        {' '}Duration: {time} min
-                    </span>
-                 </h3>
+                            {' '}Duration: {time} min
+                        </span>
+                    </h3>
                 </div>
             </div>
         )

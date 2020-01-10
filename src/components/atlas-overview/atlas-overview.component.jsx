@@ -19,7 +19,9 @@ const AtlasOverview = ({ categories, history }) => (
                 ))
             }
         </div>
-        <CustomButton inverted onClick={() => history.push('/dashboard')}>BACK</CustomButton>
+        <div className='back-button-container'>
+            <CustomButton inverted onClick={() => history.goBack()}>BACK</CustomButton>
+        </div>
     </div>
     
 )
