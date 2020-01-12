@@ -8,3 +8,8 @@ export const updateCurrentWorkout = workout => ({
 export const clearCurrentWorkout = () => ({
     type: CurrentWorkoutActionTypes.CLEAR_CURRENT_WORKOUT
 })
+
+export const updateCurrentWorkoutTime = time => ({
+    type: CurrentWorkoutActionTypes.UPDATE_CURRENT_WORKOUT_TIME,
+    payload: time
+})

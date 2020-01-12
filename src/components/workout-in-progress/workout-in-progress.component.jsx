@@ -8,10 +8,10 @@ import CustomButton from '../custom-button/custom-button.component';
 import WorkoutCompleted from '../workout-completed/workout-completed.component';
 
 import { firestore, addDocumentToCollection } from '../../firebase/firebase.utils';
-import { updateCurrentWorkout, clearCurrentWorkout } from '../../redux/current-workout/current-workout-actions';
+import { updateCurrentWorkout, clearCurrentWorkout, updateCurrentWorkoutTime } from '../../redux/current-workout/current-workout-actions';
 import { selectCurrentUser } from '../../redux/user/user-selectors';
 import { selectWorkoutTemplate } from '../../redux/workout-templates/workout-templates-selectors';
-import { selectCurrentWorkoutItem } from '../../redux/current-workout/current-workout-selectors';
+import { selectCurrentWorkoutItem, selectCurrentWorkoutTime } from '../../redux/current-workout/current-workout-selectors';
 
 import './workout-in-progress.styles.scss';
 
@@ -84,10 +84,17 @@ class WorkoutInProgress extends React.Component {
         clearInterval(this.interval);
     }
 
+    componentDidUpdate(prevProps) {
+        if(prevProps.seconds !== this.props.minutes) {
+            clearInterval(this.interval);
+            this.interval = setInterval(this.tick, 1000);
+        }
+    }
+
     tick = () => {
         var seconds = this.state.seconds;
         var minutes = this.state.minutes;
-        var hours= this.state.hours;
+        var hours = this.state.hours;
 
         if(seconds + 1 >= 60) {
             seconds = 0;
@@ -145,7 +152,7 @@ class WorkoutInProgress extends React.Component {
         const { workout, completed, seconds, minutes, hours, timerRunning } = this.state;
         return (
             <div className='workout-in-progress'>
-                <h1>{workout.workoutName}</h1>
+                <h1>{workout ? workout.workoutName : '...'}</h1>
                 <h2>Time elapsed: 
                     <span className='time'>
                         {hours < 10 ? `0${hours}` : hours}:
@@ -157,7 +164,7 @@ class WorkoutInProgress extends React.Component {
                     </span>
                 </h2>
                 {
-                    workout.exercises.map(({ id, ...otherProps }) => <WorkoutExercise key={id} id={id} onChange={this.handleExerciseChange} expanded={false} {...otherProps} />)
+                    workout ? workout.exercises.map(({ id, ...otherProps }) => <WorkoutExercise key={id} id={id} onChange={this.handleExerciseChange} expanded={false} {...otherProps} />) : '...'
                 }
                 <div className='actions'>
                     <CustomButton inverted onClick={() => this.completeWorkout()} >DONE</CustomButton>
@@ -177,11 +184,13 @@ class WorkoutInProgress extends React.Component {
 const mapStateToProps = (state, props) => ({
     workoutTemplate: selectWorkoutTemplate(props.match.params.templateName)(state),
     currentUser: selectCurrentUser(state),
-    currentWorkout: selectCurrentWorkoutItem(state)
+    currentWorkout: selectCurrentWorkoutItem(state),
+    currentWorkoutTime: selectCurrentWorkoutTime(state)
 })
 
 const mapDispatchToProps = dispatch => ({
     updateCurrentWorkout: workout => dispatch(updateCurrentWorkout(workout)),
+    updateCurrentWorkoutTime: ({ hours, minutes, seconds }) => dispatch(updateCurrentWorkoutTime({ hours, minutes, seconds })),
     clearCurrentWorkout: () => dispatch(clearCurrentWorkout())
 })
 

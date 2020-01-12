@@ -6,3 +6,8 @@ export const selectCurrentWorkoutItem = createSelector(
     [selectCurrentWorkout],
     workout => workout.currentWorkout
 )
+
+export const selectCurrentWorkoutTime = createSelector(
+    [selectCurrentWorkout],
+    workout => workout.hours
+)
