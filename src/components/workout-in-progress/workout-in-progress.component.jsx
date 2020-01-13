@@ -33,6 +33,7 @@ class WorkoutInProgress extends React.Component {
     static getDerivedStateFromProps(props, state) {
         if(props.workoutTemplate && props.currentUser && props.updateCurrentWorkout && !state.workout) {
             const { workoutTemplate: { workoutName, exercises }, updateCurrentWorkout, currentUser } = props;
+            const { hours, minutes, seconds } = props.currentWorkoutTime;
             const workoutToAdd = {
                 workoutName: workoutName,
                 exercises: exercises.map(exercise => {
@@ -69,7 +70,10 @@ class WorkoutInProgress extends React.Component {
                 }
             }
             return {
-                workout: props.currentWorkout
+                workout: props.currentWorkout,
+                seconds: seconds,
+                minutes: minutes,
+                hours: hours
             }
         }
         return null;
@@ -85,7 +89,7 @@ class WorkoutInProgress extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        if(prevProps.seconds !== this.props.minutes) {
+        if(prevProps.seconds !== this.props.seconds) {
             clearInterval(this.interval);
             this.interval = setInterval(this.tick, 1000);
         }
@@ -112,7 +116,7 @@ class WorkoutInProgress extends React.Component {
             seconds: seconds,
             minutes: minutes,
             hours: hours
-        })
+        }, () => this.props.updateCurrentWorkoutTime({ hours, minutes, seconds }))
     }
 
     toggleTimer = () => {
@@ -127,13 +131,37 @@ class WorkoutInProgress extends React.Component {
     }
 
     completeWorkout = () => {
+        var workout = this.state.workout;
+
+        workout.exercises.forEach(exercise => {
+            if (exercise.type !== 'aerobic') {
+                exercise.sets.forEach(set => {
+                    if(exercise.type === 'weighted') {
+                        if(!set.weight) {
+                            set.weight = 0
+                        }
+                    }
+                    if(!set.reps) {
+                        set.reps = 0
+                    }
+                })
+            } else {
+                if(!exercise.averageHeartRate) {
+                    exercise.averageHeartRate = 0;
+                }
+                if(!exercise.duration) {
+                    exercise.duration = 0;
+                }
+            }
+        });
+
+        workout.time = this.state.minutes;
+
         this.setState(
             {
-                workout: update(this.state.workout, {time: {$set: this.state.minutes }}),
+                workout: workout,
                 completed: true
-            }, () => {
-                addDocumentToCollection('workouts', this.state.workout)
-            }
+            }, () => addDocumentToCollection('workouts', this.state.workout)
         );
     }
 

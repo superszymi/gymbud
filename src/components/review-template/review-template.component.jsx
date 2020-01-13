@@ -10,7 +10,6 @@ import { selectCurrentUser } from '../../redux/user/user-selectors';
 
 import FormInput from '../form-input/form-input.component';
 import CustomButton from '../custom-button/custom-button.component';
-import WorkoutCompleted from '../workout-completed/workout-completed.component';
 
 import ReviewTemplateItem from '../review-template-item/review-template-item.component';
 

@@ -44,6 +44,33 @@
     }
   }
 
+@media (hover: none) {
+  .custom-button {
+    &:hover {
+      background-color: black;
+      color: white;
+      box-shadow: none;
+    }
+
+    &.inverted {
+      &:hover {
+        color: black;
+        background-color: white;
+        box-shadow: inset -1px 0 0 black, inset 0 -1px 0 black, inset 1px 0 0 black, inset 0 1px 0 black;
+      }
+    }
+
+    &.google-sign-in {
+      &:hover {
+        background-color: #4285f4;
+        color: white;
+        font-family: 'Roboto';
+        font-weight: normal;
+      }
+    }
+  }
+}
+
 @media screen and (max-width: 450px) {
   .custom-button {
     &.google-sign-in {

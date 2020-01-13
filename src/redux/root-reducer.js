@@ -18,7 +18,7 @@ export const transformCircular = createTransform(
 const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['chosenExercises', 'currentWorkout'],
+    whitelist: ['user', 'chosenExercises', 'currentWorkout', 'atlas', 'workouts', 'workoutTemplates'],
     transforms: [transformCircular]
 }
 
