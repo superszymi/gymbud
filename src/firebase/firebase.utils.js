@@ -121,6 +121,8 @@ const config = {
 
   export const auth = firebase.auth();
 
+  firebase.firestore().enablePersistence().catch(err => console.log(err))
+
   export const firestore = firebase.firestore();
 
   const provider = new firebase.auth.GoogleAuthProvider();

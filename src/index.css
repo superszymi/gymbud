@@ -1,9 +1,15 @@
 body {
+  color: white;
+  background-color: rgb(43, 51, 58);
   margin: 0;
   font-family: montserrat;
 }
 
 a {
-  color: black;
+  color: white;
   text-decoration: none;
+}
+
+svg {
+  fill: #66B3FF;
 }

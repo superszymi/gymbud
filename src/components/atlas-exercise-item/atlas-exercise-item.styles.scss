@@ -5,8 +5,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid black;
+    border: 1px solid #66B3FF;
     margin: 10px;
+
+    &:hover {
+        border: 3px solid #66B3FF;
+    }
 
     .content {
         display: flex;
@@ -28,5 +32,13 @@
   @media screen and (max-width: 480px) {
     .exercise-item {
         width: 100%;
+    }
+}
+
+@media (hover: none) {
+    .exercise-item {
+        &:hover {
+            border: 1px solid #66B3FF;
+        }
     }
 }

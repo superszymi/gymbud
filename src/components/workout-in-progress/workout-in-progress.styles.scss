@@ -19,17 +19,31 @@
         vertical-align: middle;
         width: 60px;
         height: 30px;
-        box-shadow: inset -1px 0 0 black, inset 0 -1px 0 black, inset 1px 0 0 black, inset 0 1px 0 black;
+        background-color: rgb(27, 31, 34);
+        color: white;
+        box-shadow: inset -1px 0 0 #66B3FF, inset 0 -1px 0 #66B3FF, inset 1px 0 0 #66B3FF, inset 0 1px 0 #66B3FF;
         cursor: pointer;
 
         &:hover {
             box-shadow: none;
-            background-color: black;
-            color: white;
+            background-color: white;
+            color: rgb(27, 31, 34);
         }
 
         .pause-button {
             line-height: 1.2px;
+        }
+    }
+}
+
+@media (hover: none) {
+    .workout-in-progress {
+        .timer-button {
+            &:hover {
+                color: white;
+                box-shadow: inset -1px 0 0 #66B3FF, inset 0 -1px 0 #66B3FF, inset 1px 0 0 #66B3FF, inset 0 1px 0 #66B3FF;
+                background-color: rgb(27, 31, 34);
+            }
         }
     }
 }

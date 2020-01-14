@@ -1,5 +1,9 @@
 .header {
-    background-color: white;
+    position: fixed;
+    background-color: rgb(27, 31, 34);
+    top: 0;
+    left: 0;
+    right: 0;
     height: 100px;
     width: 100%;
     display: flex;
@@ -12,6 +16,7 @@
         height: 100%;
         width: 70px;
         padding: 5px;
+        margin-left: 20px;
 
         .header-logo {
             display: block;
@@ -24,7 +29,7 @@
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        margin-right: 20px;
+        margin-right: 25px;
 
         .logged-in {
             display: flex;

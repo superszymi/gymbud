@@ -35,7 +35,7 @@ class WorkoutItem extends React.Component {
                                     exercises.reduce((accumulator, exercise) => {
                                         if(exercise.type === 'weighted') {
                                             return accumulator + exercise.sets.reduce((accumulator, set) => {
-                                                return accumulator + parseInt(set.weight !== "" ? set.weight : 0, 10)
+                                                return accumulator + parseInt(set.weight !== 0 ? set.weight : 0, 10)
                                             }, 0)
                                         }
                                         return accumulator

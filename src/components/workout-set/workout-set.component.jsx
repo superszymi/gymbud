@@ -9,8 +9,8 @@ class WorkoutSet extends React.Component {
         super(props);
 
         this.state = {
-            reps: props.set.reps ? props.set.reps : '0',
-            weight: props.set.weight ? props.set.weight : '0'
+            reps: props.set.reps ? props.set.reps : '',
+            weight: props.set.weight ? props.set.weight : ''
         }
     }
 

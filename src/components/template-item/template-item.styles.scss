@@ -4,8 +4,12 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    border: 1px solid black;
+    border: 1px solid #66B3FF;
     margin: 10px 0;
+
+    &:hover {
+        box-shadow: inset -1px 0 0 #66B3FF, inset 0 -1px 0 #66B3FF, inset 1px 0 0 #66B3FF, inset 0 1px 0 #66B3FF;
+    }
     
     .buttons {
         display: flex;
@@ -41,6 +45,14 @@
 
         .details {
             font-size: smaller;
+        }
+    }
+}
+
+@media (hover: none) {
+    .template-item {
+        &:hover {
+            box-shadow: none;
         }
     }
 }

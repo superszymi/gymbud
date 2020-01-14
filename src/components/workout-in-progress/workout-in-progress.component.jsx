@@ -32,7 +32,7 @@ class WorkoutInProgress extends React.Component {
 
     static getDerivedStateFromProps(props, state) {
         if(props.workoutTemplate && props.currentUser && props.updateCurrentWorkout && !state.workout) {
-            const { workoutTemplate: { workoutName, exercises }, updateCurrentWorkout, currentUser } = props;
+            const { workoutTemplate: { workoutName, exercises }, updateCurrentWorkout } = props;
             const { hours, minutes, seconds } = props.currentWorkoutTime;
             const workoutToAdd = {
                 workoutName: workoutName,
@@ -59,9 +59,9 @@ class WorkoutInProgress extends React.Component {
                         }
                     }
                 }),
-                date: new Date(),
+                date: null,
                 time: 0,
-                user: firestore.doc(`/users/${currentUser.id}`)
+                user: null
             }
             if(!props.currentWorkout) {
                 updateCurrentWorkout(workoutToAdd);
@@ -132,36 +132,37 @@ class WorkoutInProgress extends React.Component {
 
     completeWorkout = () => {
         var workout = this.state.workout;
+        clearInterval(this.interval)
 
         workout.exercises.forEach(exercise => {
             if (exercise.type !== 'aerobic') {
                 exercise.sets.forEach(set => {
                     if(exercise.type === 'weighted') {
-                        if(!set.weight) {
+                        if(!set.weight.length) {
                             set.weight = 0
                         }
                     }
-                    if(!set.reps) {
+                    if(!set.reps.length) {
                         set.reps = 0
                     }
                 })
             } else {
-                if(!exercise.averageHeartRate) {
+                if(!exercise.averageHeartRate.length) {
                     exercise.averageHeartRate = 0;
                 }
-                if(!exercise.duration) {
+                if(!exercise.duration.length) {
                     exercise.duration = 0;
                 }
             }
         });
-
+        workout.date = new Date();
+        workout.user = firestore.doc(`/users/${this.props.currentUser.id}`);
         workout.time = this.state.minutes;
 
         this.setState(
             {
-                workout: workout,
                 completed: true
-            }, () => addDocumentToCollection('workouts', this.state.workout)
+            }, () => addDocumentToCollection('workouts', workout)
         );
     }
 

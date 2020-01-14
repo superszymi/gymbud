@@ -83,7 +83,6 @@ class ReviewTemplate extends React.Component {
         const { exercises, id, workoutName } = this.state;
         const user = firestore.doc(`/users/${this.props.currentUser.id}`);
         const chosenExercises = exercises.map(({name, sets, type, id}) => sets ? ({name, sets, type, id}) : ({name, type, id}));
-        console.log(chosenExercises);
         id ? updateDocumentInCollection('workoutTemplates', { exercises: chosenExercises, user, workoutName, id }) : addDocumentToCollection('workoutTemplates', { exercises: chosenExercises, user, workoutName });   
     }
 

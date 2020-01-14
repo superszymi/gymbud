@@ -66,7 +66,7 @@ class WorkoutExercise extends React.Component {
         return (
             <div className='workout-exercise'>
                 <h3>{name} { sets ? '(' + setsCompleted + '/' + sets.length + ')' : '' } {expanded ? <span className='expand-button' onClick={() => this.toggleExpand()}>&#9660;</span> : 
-                    <span className='expand-button' onClick={() => this.toggleExpand()}>&#9654;</span>} </h3>
+                    <span className='expand-button' onClick={() => this.toggleExpand()}>&#9655;</span>} </h3>
                 {
                     expanded ?  (
                     sets ? sets.map((set, index) =>

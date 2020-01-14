@@ -13,7 +13,8 @@ class SignIn extends React.Component {
 
     this.state = {
       email: '',
-      password: ''
+      password: '',
+      wrongCredentials: false
     };
   }
 
@@ -26,7 +27,10 @@ class SignIn extends React.Component {
       await auth.signInWithEmailAndPassword(email, password);
       this.setState({ email: '', password: '' });
     } catch(error) {
-      console.log(error);
+      this.setState({
+        wrongCredentials: true
+      })
+
     }
   };
 
@@ -41,8 +45,16 @@ class SignIn extends React.Component {
       <div className='sign-in'>
         <h2>I already have an account</h2>
         <span>Sign in with your email and password</span>
-
-        <form onSubmit={this.handleSubmit}>
+        {
+          this.state.wrongCredentials ? 
+          <div className='sign-in-popup'>
+              <div className='sign-in-popup-inner'>
+                  <h3>Wrong email address or password! Try again</h3>
+                  <CustomButton onClick={() => this.setState({wrongCredentials: false, password: ''})}>OK</CustomButton>
+              </div>
+          </div> 
+          :
+          <form onSubmit={this.handleSubmit}>
           <FormInput
             name='email'
             type='email'
@@ -64,6 +76,7 @@ class SignIn extends React.Component {
             <CustomButton type='button' isGoogleSignIn onClick={() => {signInWithGoogle().catch(() => this.props.onSignIn(false)).then(() => this.props.onSignIn(false)); this.props.onSignIn(true)}}>Sign in with Google</CustomButton>
           </div>
         </form>
+        }
       </div>
     );
   }

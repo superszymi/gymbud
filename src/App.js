@@ -49,6 +49,11 @@ class App extends React.Component {
     });
   }
 
+
+  componentWillUnmount() {
+    this.unsubscribeFromAuth();
+  }
+
   static getDerivedStateFromProps(props) {
     if(props.currentUser) {
       if(props.currentUser.displayName) {
@@ -58,12 +63,8 @@ class App extends React.Component {
         }
       }
     }
+    
     return null;
-  }
-
-
-  componentWillUnmount() {
-    this.unsubscribeFromAuth();
   }
 
   loadSignIn(arg) {
@@ -79,7 +80,7 @@ class App extends React.Component {
         <Header />
         <Switch>
           <Route exact path='/' render={() => this.props.currentUser ? (<Redirect to='/dashboard' />) : (<HomepageWithLoading isLoading={this.props.currentUser} />)} /> 
-          <Route exact path='/dashboard' component={props => <DashboardPageWithLoading isLoading={loading} currentUser={currentUser} {...props} />} />
+          <Route exact path='/dashboard' render={props => <DashboardPageWithLoading isLoading={loading} currentUser={currentUser} {...props} />} />
           <Route path='/atlas' render={props => <ExerciseAtlasPage currentUser={currentUser} {...props} /> } />
           <Route exact path='/sign-in' render={() => this.props.currentUser ? (<Redirect to='/dashboard' />) : (<SignInSignUpPageWithLoading isLoading={signInLoading} signingIn={arg => this.loadSignIn(arg)}/>)} />
           <Route path='/start-workout' render={props => <StartWorkoutPage currentUser={currentUser} {...props} />} />

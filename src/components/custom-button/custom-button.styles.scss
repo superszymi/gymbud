@@ -4,7 +4,7 @@
     height: 50px;
     letter-spacing: 0.5px;
     font-size: 15px;
-    background-color: black;
+    background-color: #66B3FF;
     color: white;
     text-transform: uppercase;
     font-family: 'Montserrat';
@@ -16,17 +16,16 @@
     &:hover {
       background-color: white;
       color: black;
-      box-shadow: inset -1px 0 0 black, inset 0 -1px 0 black, inset 1px 0 0 black, inset 0 1px 0 black;
     }
 
     &.inverted {
-      color: black;
-      background-color: white;
-      box-shadow: inset -1px 0 0 black, inset 0 -1px 0 black, inset 1px 0 0 black, inset 0 1px 0 black;
+      color: white;
+      background-color:rgb(27, 31, 34);
+      box-shadow: inset -1px 0 0 #66B3FF, inset 0 -1px 0 #66B3FF, inset 1px 0 0 #66B3FF, inset 0 1px 0 #66B3FF;
 
       &:hover {
-        color: white;
-        background-color: black;
+        background-color: white;
+        color:rgb(27, 31, 34);
         box-shadow: none;
       }
     }
