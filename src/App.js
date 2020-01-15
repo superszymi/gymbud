@@ -77,7 +77,6 @@ class App extends React.Component {
     const { loading, currentUser, signInLoading } = this.state;
     return (
       <div>
-        <Header />
         <Switch>
           <Route exact path='/' render={() => this.props.currentUser ? (<Redirect to='/dashboard' />) : (<HomepageWithLoading isLoading={this.props.currentUser} />)} /> 
           <Route exact path='/dashboard' render={props => <DashboardPageWithLoading isLoading={loading} currentUser={currentUser} {...props} />} />
@@ -87,6 +86,8 @@ class App extends React.Component {
           <Route path='/workouts' render={props => <WorkoutsPage currentUser={currentUser} {...props} />} />
           <Route path='/templates' render={props => <TemplatesPage currentUser={currentUser} {...props} />} />
         </Switch>
+        
+        <Header />
       </div>
     );
   }
