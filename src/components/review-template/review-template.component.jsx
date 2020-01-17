@@ -81,8 +81,10 @@ class ReviewTemplate extends React.Component {
 
     addWorkoutTemplate = () => {
         const { exercises, id, workoutName } = this.state;
+        exercises.forEach(exercise => exercise.goals = new Array(exercise.sets ? exercise.sets : 1)
+            .fill(exercise.sets ? exercise.type === 'weighted' ? {reps: '', weight: ''} : {reps: ''} : {averageHeartRate: '', duration: ''}));
         const user = firestore.doc(`/users/${this.props.currentUser.id}`);
-        const chosenExercises = exercises.map(({name, sets, type, id}) => sets ? ({name, sets, type, id}) : ({name, type, id}));
+        const chosenExercises = exercises.map(({name, sets, type, id, goals}) => sets ? ({name, sets, goals, type, id}) : ({name, type, id, goals}));
         id ? updateDocumentInCollection('workoutTemplates', { exercises: chosenExercises, user, workoutName, id }) : addDocumentToCollection('workoutTemplates', { exercises: chosenExercises, user, workoutName });   
     }
 
