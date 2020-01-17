@@ -2,9 +2,7 @@ import { CurrentWorkoutActionTypes } from './current-workout-action-types';
 
 const INITIAL_STATE = {
     currentWorkout: null,
-    hours: 0,
-    minutes: 0,
-    seconds: 0
+    time: 0
 }
 
 const currentWorkoutReducer = (state = INITIAL_STATE, action) => {
@@ -22,9 +20,7 @@ const currentWorkoutReducer = (state = INITIAL_STATE, action) => {
         case CurrentWorkoutActionTypes.UPDATE_CURRENT_WORKOUT_TIME:
             return {
                 ...state,
-                hours: action.payload.hours,
-                minutes: action.payload.minutes,
-                seconds: action.payload.seconds
+                time: action.payload
             }
         default:
             return state;

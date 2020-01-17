@@ -42,10 +42,10 @@ class DashboardPage extends React.Component {
           if(workouts[0].exercises.find(exercise => exercise.type === 'aerobic' && exercise.averageHeartRate < 120)) {
             messages.push('Your heart rate during latest aerobic exercise was low.|Did you go easy on yourself? Try to keep your heart rate above 120bpm during aerobic exercises')
           }
-          if(workouts[0].exercises.reduce((accumulator, exercise) => {
+          if(workouts.length > 1 && workouts[0].exercises.reduce((accumulator, exercise) => {
             if(exercise.type === 'weighted') {
                 return accumulator + exercise.sets.reduce((accumulator, set) => {
-                    return accumulator + parseInt(set.weight !== 0 ? set.weight : 0, 10)
+                    return accumulator + parseInt(set.weight !== 0 && set.reps !== 0 ? set.weight * set.reps : 0, 10)
                 }, 0)
               }
               return accumulator
@@ -54,7 +54,7 @@ class DashboardPage extends React.Component {
             Math.max.apply(null, workouts.slice(1).map(workout => workout.exercises.reduce((accumulator, exercise) => {
               if(exercise.type === 'weighted') {
                   return accumulator + exercise.sets.reduce((accumulator, set) => {
-                      return accumulator + parseInt(set.weight !== 0 ? set.weight : 0, 10)
+                      return accumulator + parseInt(set.weight !== 0 && set.reps !== 0 ? set.weight * set.reps : 0, 10)
                   }, 0)
                 }
                 return accumulator
@@ -104,8 +104,8 @@ class DashboardPage extends React.Component {
                         </div>
                     </div>
                     <div className='insights'>
-                        <h2>{insight.substring(0, insight.indexOf('|'))}</h2>
-                        <h4>{insight.substring(insight.indexOf('|') + 1)}</h4>
+                        <h2>{insight ? insight.substring(0, insight.indexOf('|')) : ''}</h2>
+                        <h4>{insight ? insight.substring(insight.indexOf('|') + 1) : ''}</h4>
                     </div>
                 </div>
             </div>

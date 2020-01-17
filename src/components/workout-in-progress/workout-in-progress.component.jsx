@@ -23,9 +23,10 @@ class WorkoutInProgress extends React.Component {
         this.state = {
             workout: null,
             completed: false,
-            hours: 0,
-            minutes: 0,
-            seconds: 0,
+            startTime: new Date().getTime(),
+            currentTime: 0,
+            pauseTime: 0,
+            pause: 0,
             timerRunning: true
         }
     }
@@ -33,7 +34,7 @@ class WorkoutInProgress extends React.Component {
     static getDerivedStateFromProps(props, state) {
         if(props.workoutTemplate && props.currentUser && props.updateCurrentWorkout && !state.workout) {
             const { workoutTemplate: { workoutName, exercises }, updateCurrentWorkout } = props;
-            const { hours, minutes, seconds } = props.currentWorkoutTime;
+            const time = props.currentWorkoutTime;
             const workoutToAdd = {
                 workoutName: workoutName,
                 exercises: exercises.map(exercise => {
@@ -71,9 +72,7 @@ class WorkoutInProgress extends React.Component {
             }
             return {
                 workout: props.currentWorkout,
-                seconds: seconds,
-                minutes: minutes,
-                hours: hours
+                startTime: new Date().getTime() - time
             }
         }
         return null;
@@ -89,41 +88,32 @@ class WorkoutInProgress extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        if(prevProps.seconds !== this.props.seconds) {
+        if(prevProps.time !== this.props.time) {
             clearInterval(this.interval);
             this.interval = setInterval(this.tick, 1000);
         }
     }
 
     tick = () => {
-        var seconds = this.state.seconds;
-        var minutes = this.state.minutes;
-        var hours = this.state.hours;
-
-        if(seconds + 1 >= 60) {
-            seconds = 0;
-            if(minutes + 1 >= 60) {
-                minutes = 0;
-                hours = hours + 1;
-            } else {
-                minutes = minutes + 1;
-            }
-        } else {
-            seconds = seconds + 1
-        }
-
+        const start = this.state.startTime;
+        const now = new Date().getTime();
+        const pause = this.state.pauseTime;
+        const time = now - start - pause;
+        
         this.setState({
-            seconds: seconds,
-            minutes: minutes,
-            hours: hours
-        }, () => this.props.updateCurrentWorkoutTime({ hours, minutes, seconds }))
+            currentTime: time
+        }, () => this.props.updateCurrentWorkoutTime(time))
     }
 
     toggleTimer = () => {
         if(this.state.timerRunning) {
-            clearInterval(this.interval)
+            this.setState({
+                pause: new Date().getTime()
+            }, () => clearInterval(this.interval))
         } else {
-            this.interval = setInterval(this.tick, 1000)
+            this.setState({
+                pauseTime: this.state.pauseTime + (new Date().getTime() - this.state.pause)
+            }, () => this.interval = setInterval(this.tick, 1000))
         }
         this.setState({
             timerRunning: !this.state.timerRunning
@@ -157,12 +147,15 @@ class WorkoutInProgress extends React.Component {
         });
         workout.date = new Date();
         workout.user = firestore.doc(`/users/${this.props.currentUser.id}`);
-        workout.time = this.state.minutes;
+        workout.time = Math.floor((this.state.currentTime % (1000*60*60)) / (1000*60));
 
         this.setState(
             {
                 completed: true
-            }, () => addDocumentToCollection('workouts', workout)
+            }, () => {
+                addDocumentToCollection('workouts', workout);
+                updateCurrentWorkoutTime(this.state.currentTime)
+            }
         );
     }
 
@@ -178,15 +171,18 @@ class WorkoutInProgress extends React.Component {
     }
 
     render() {
-        const { workout, completed, seconds, minutes, hours, timerRunning } = this.state;
+        const { workout, completed, currentTime, timerRunning } = this.state;
+        const hours = Math.floor((currentTime % (1000*60*60*24)) / (1000*60*60));
+        const minutes = Math.floor((currentTime % (1000*60*60)) / (1000*60))
+        const seconds = Math.floor((currentTime % (1000*60)) / 1000)
         return (
             <div className='workout-in-progress'>
                 <h1>{workout ? workout.workoutName : '...'}</h1>
                 <h2>Time elapsed: 
                     <span className='time'>
-                        {hours < 10 ? `0${hours}` : hours}:
-                        {minutes < 10 ? `0${minutes}` : minutes}:
-                        {seconds < 10 ? `0${seconds}` : seconds}
+                        {hours ? (hours < 10 ? `0${hours}` : hours) : '00'}:
+                        {minutes ? (minutes < 10 ? `0${minutes}` : minutes) : '00'}:
+                        {seconds ? (seconds < 10 ? `0${seconds}` : seconds) : '00'}
                     </span>
                     <span className='timer-button' onClick={() => this.toggleTimer()}>
                         {timerRunning ? <span className='pause-button'>&#10074;&#10074;</span> : <span className='play-button'>&#9658;</span>}
@@ -219,7 +215,7 @@ const mapStateToProps = (state, props) => ({
 
 const mapDispatchToProps = dispatch => ({
     updateCurrentWorkout: workout => dispatch(updateCurrentWorkout(workout)),
-    updateCurrentWorkoutTime: ({ hours, minutes, seconds }) => dispatch(updateCurrentWorkoutTime({ hours, minutes, seconds })),
+    updateCurrentWorkoutTime: time => dispatch(updateCurrentWorkoutTime(time)),
     clearCurrentWorkout: () => dispatch(clearCurrentWorkout())
 })
 

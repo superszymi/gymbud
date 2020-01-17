@@ -9,5 +9,5 @@ export const selectCurrentWorkoutItem = createSelector(
 
 export const selectCurrentWorkoutTime = createSelector(
     [selectCurrentWorkout],
-    workout => ({hours: workout.hours, minutes: workout.minutes, seconds: workout.seconds})
+    workout => workout.time
 )
