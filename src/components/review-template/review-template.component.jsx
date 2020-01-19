@@ -23,8 +23,9 @@ class ReviewTemplate extends React.Component {
             id: '',
             workoutName: '',
             exercises: null,
-            start: null,
-            noExercises: false
+            noExercises: false,
+            chooseGoals: false,
+            goalsClicked: false,
         }
     }
 
@@ -60,17 +61,15 @@ class ReviewTemplate extends React.Component {
         history.push('/atlas');
     }
 
-    saveAndStart = () => {
-        const { history } = this.props;
-        const { workoutName } = this.state;
+    save = () => {
         this.addWorkoutTemplate();
-        history.push(`/start-workout/${workoutName}`);
-    }
-
-    saveAndBack = () => {
-        const { history } = this.props;
-        this.addWorkoutTemplate();
-        history.push('/templates');
+        if(this.props.firstTime && !this.state.goalsClicked) {
+            this.setState({
+                chooseGoals: true
+            })
+        } else {
+            this.props.history.push('/templates')
+        }
     }
 
     discardAndBack = () => {
@@ -81,8 +80,10 @@ class ReviewTemplate extends React.Component {
 
     addWorkoutTemplate = () => {
         const { exercises, id, workoutName } = this.state;
+        exercises.forEach(exercise => exercise.goals = new Array(exercise.sets ? exercise.sets : 1)
+            .fill(exercise.sets ? exercise.type === 'weighted' ? {reps: '', weight: ''} : {reps: ''} : {averageHeartRate: '', duration: ''}));
         const user = firestore.doc(`/users/${this.props.currentUser.id}`);
-        const chosenExercises = exercises.map(({name, sets, type, id}) => sets ? ({name, sets, type, id}) : ({name, type, id}));
+        const chosenExercises = exercises.map(({name, sets, type, id, goals}) => sets ? ({name, sets, goals, type, id}) : ({name, type, id, goals}));
         id ? updateDocumentInCollection('workoutTemplates', { exercises: chosenExercises, user, workoutName, id }) : addDocumentToCollection('workoutTemplates', { exercises: chosenExercises, user, workoutName });   
     }
 
@@ -92,15 +93,11 @@ class ReviewTemplate extends React.Component {
             this.setState({noExercises: true});
             return null;
         }
-        if(this.state.start === true) {
-            this.saveAndStart()
-        } else if (this.state.start === false) {
-            this.saveAndBack()
-        }
+        this.save()
     }
 
     render() {
-        const { exercises, totalExercises, totalSets, noExercises } = this.state;
+        const { exercises, totalExercises, totalSets, noExercises, workoutName, chooseGoals } = this.state;
         return (
             <div>
                 {
@@ -138,13 +135,16 @@ class ReviewTemplate extends React.Component {
                                 <CustomButton onClick={() => this.addExercises()}>ADD EXERCISES</CustomButton>
                                 <span>Add more exercises to the template</span>
                             </div>
+                            {
+                                this.props.firstTime ? '' : 
+                                    <div className='action'>
+                                        <CustomButton type='button' onClick={() => this.props.history.push(`/templates/${workoutName}/goals`)} >SET GOALS</CustomButton>
+                                        <span>Set rep and weight goals for this template</span>
+                                    </div>
+                            }
                             <div className='action'>
-                                <CustomButton type='submit' form='review-template-form' onClick={() => this.setState({start: true})}>START WORKOUT</CustomButton>
-                                <span>Save template and start workout now</span>
-                            </div>
-                            <div className='action'>
-                                <CustomButton type='submit' form='review-template-form' onClick={() => this.setState({start: false})}>SAVE WORKOUT</CustomButton>
-                                <span>Save template and go back</span>
+                                <CustomButton type='submit' form='review-template-form' >SAVE WORKOUT</CustomButton>
+                                <span>Save template</span>
                             </div>
                             <div className='action'>
                                 <CustomButton inverted onClick={() => this.discardAndBack()}>DISCARD</CustomButton>
@@ -152,6 +152,17 @@ class ReviewTemplate extends React.Component {
                             </div>
                         </div>
                     </div>
+                }
+                {
+                    chooseGoals ? 
+                    <div className='review-popup'>
+                        <div className='review-popup-inner'>
+                            <h3>Do you wish to set weight and rep targets to exercises?</h3>
+                            <p>You can always do this in template edition view</p>
+                            <CustomButton onClick={() => this.setState({chooseGoals: false}, this.props.history.push(`/templates/${workoutName}/goals`))}>YES</CustomButton>
+                            <CustomButton inverted onClick={() => this.setState({chooseGoals: false}, this.props.history.push('/templates'))}>NO</CustomButton>
+                        </div>
+                    </div> : ''
                 }
             </div>
             

@@ -8,11 +8,13 @@ import { updateTemplates } from '../../redux/workout-templates/workout-templates
 import TemplatesOverview from '../../components/templates-overview/templates-overview.component';
 import WithLoading from '../../components/with-loading/with-loading.component';
 import ReviewTemplate from '../../components/review-template/review-template.component';
+import TemplateGoals from '../../components/template-goals/template-goals.component';
 
 import './templates.styles.scss';
 
 const TemplatesOverviewWithLoading = WithLoading(TemplatesOverview);
 const ReviewTemplateWithLoading = WithLoading(ReviewTemplate);
+const TemplateGoalsWithLoading = WithLoading(TemplateGoals);
 
 class TemplatesPage extends React.Component {
     state = {
@@ -52,6 +54,7 @@ class TemplatesPage extends React.Component {
             <div className='templates'>
                 <Route exact path={`${match.path}`} render={props => <TemplatesOverviewWithLoading isLoading={loading} {...props} /> } />
                 <Route exact path={`${match.path}/:templateName`} render={props => <ReviewTemplateWithLoading isLoading={loading} {...props} /> } />
+                <Route exact path={`${match.path}/:templateName/goals`} render={props => <TemplateGoalsWithLoading isLoading={loading} {...props} />} />
             </div>
         )
     }

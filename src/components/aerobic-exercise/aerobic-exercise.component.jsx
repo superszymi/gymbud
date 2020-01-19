@@ -9,8 +9,8 @@ class AerobicExercise extends React.Component {
         super(props);
 
         this.state = {
-            averageHeartRate : props.averageHeartRate,
-            duration: props.duration
+            averageHeartRate : props.averageHeartRate ? props.averageHeartRate : '',
+            duration: props.duration ? props.duration : ''
         }
     }
 

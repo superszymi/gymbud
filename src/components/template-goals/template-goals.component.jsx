@@ -7,10 +7,8 @@ import WorkoutExercise from '../workout-exercise/workout-exercise.component';
 import CustomButton from '../custom-button/custom-button.component';
 
 import { updateDocumentInCollection } from '../../firebase/firebase.utils';
-
-//import './template-goals.styles.scss';
-import { selectWorkoutTemplate } from '../../redux/workout-templates/workout-templates-selectors';
 import { updateTemplateById } from '../../redux/workout-templates/workout-templates-actions';
+import { selectWorkoutTemplate } from '../../redux/workout-templates/workout-templates-selectors';
 
 
 class TemplateGoals extends React.Component {
@@ -19,50 +17,60 @@ class TemplateGoals extends React.Component {
         super();
 
         this.state = {
-            template: null,
-            goals: null
+            template: null
         }
     }
 
     static getDerivedStateFromProps(props, state) {
-        if(props.template) {
-            var goals = Array.from(Object.create(props.template.exercises))
-            goals.map(exercise => exercise.sets = new Array(exercise.sets).fill(0).map(() => exercise.type === 'weighted' ? ({ reps: '', weight: '' }) : ({ reps: '' })))
-            console.log(props.template)
-            return {
-                template: props.template,
-                goals: goals
-            }
+        if(props.template && props.updateTemplateById && !state.template) {
+            return props;
         }
         return null;
     }
 
     saveTemplate = () => {
-        const goals = this.state.goals;
-        this.setState({
-            template: update(this.state.template, {goals: {$set: goals}})
-        }, () => updateDocumentInCollection('workoutTemplates', this.state.template))
+        const { template } = this.state;
+        updateDocumentInCollection('workoutTemplates', template);
+        this.props.updateTemplateById(template);
+        this.props.history.push('/templates')
     }
 
     handleExerciseChange = (id, sets) => {
-        const { template, goals } = this.state;
-        const index = goals.indexOf(goals.find(exercise => exercise.id === id));
-        this.setState({
-            goals: update(this.state.goals,{[index]: {sets: {$set: sets}}})
-        });
+        const { template } = this.state;
+        const { exercises } = template;
+        var type = ''
+        const index = exercises.indexOf(exercises.find(exercise => {type = exercise.type; return exercise.id === id;}));
+        if(type === 'aerobic') {
+            var exercise = exercises[index];
+            exercise.averageHeartRate = sets.averageHeartRate;
+            exercise.duration = sets.duration;
+
+            this.setState({
+                template: update(template, {exercises: {[index]: {$set: exercise}}})
+            })
+        } else {
+            this.setState({
+                template: update(template, {exercises: {[index]: {goals: {$set: sets}}}})
+            });
+        }
     }
 
     render() {
-        const { goals, template } = this.state;
+        const { template } = this.state;
         return (
             <div className='workout-details'>
                 <h1>{template ? template.workoutName : '...'}</h1>
                 {
-                    goals ? goals.map(({ id, ...otherProps }) => <WorkoutExercise key={id} id={id} onChange={this.handleExerciseChange} expanded={true} {...otherProps} />) : '...'
+                    template ? template.exercises.map(({ id, goals, type, sets, ...otherProps }) => 
+                        <WorkoutExercise key={id} id={id} type={type} sets={type === 'aerobic' ? null : goals} 
+                            averageHeartRate={type === 'aerobic' && goals.averageHeartRate ? goals.averageHeartRate : null} 
+                            duration={type === 'aerobic' && goals.duration ? goals.duration : null} onChange={this.handleExerciseChange} 
+                            expanded={true} {...otherProps} />) 
+                    : '...'
                 }
                 <div className='actions'>
                     <CustomButton onClick={this.saveTemplate} >SAVE</CustomButton>
-                    <CustomButton inverted onClick={() => this.props.history.goBack()} >BACK</CustomButton>
+                    <CustomButton inverted onClick={() => this.props.history.push('/templates')} >BACK</CustomButton>
                 </div>
             </div>
         )
@@ -74,7 +82,7 @@ const mapStateToProps = (state, props) => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-    updateTemplate: id => dispatch(updateTemplateById(id))
+    updateTemplateById: template => dispatch(updateTemplateById(template))
 })
 
 
