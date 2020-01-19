@@ -5,7 +5,6 @@ import update from 'immutability-helper';
 
 import WorkoutExercise from '../workout-exercise/workout-exercise.component';
 import CustomButton from '../custom-button/custom-button.component';
-import WorkoutCompleted from '../workout-completed/workout-completed.component';
 
 import { firestore, addDocumentToCollection } from '../../firebase/firebase.utils';
 import { updateCurrentWorkout, clearCurrentWorkout, updateCurrentWorkoutTime } from '../../redux/current-workout/current-workout-actions';
@@ -27,7 +26,10 @@ class WorkoutInProgress extends React.Component {
             currentTime: 0,
             pauseTime: 0,
             pause: 0,
-            timerRunning: true
+            timerRunning: true,
+            repDifference: 0,
+            weightDifference: 0,
+            aeroDifference: 0
         }
     }
 
@@ -43,15 +45,15 @@ class WorkoutInProgress extends React.Component {
                             id: exercise.id,
                             name: exercise.name,
                             type: exercise.type,
-                            averageHeartRate: '',
-                            duration: ''
+                            averageHeartRate: exercise.averageHeartRate ? exercise.averageHeartRate : '',
+                            duration: exercise.duration ? exercise.duration : ''
                         }
                     } else {
                         return {
                             id: exercise.id,
                             name: exercise.name,
                             type: exercise.type,
-                            sets: new Array(exercise.sets).fill(0).map(() => exercise.type === 'weighted' ? ({
+                            sets: exercise.goals ? exercise.goals : new Array(exercise.sets).fill(0).map(() => exercise.type === 'weighted' ? ({
                                 reps: '',
                                 weight: ''
                             }) : ({
@@ -122,6 +124,10 @@ class WorkoutInProgress extends React.Component {
 
     completeWorkout = () => {
         var workout = this.state.workout;
+        const { exercises } = this.props.workoutTemplate;
+        var weightDifference = 0;
+        var repDifference = 0;
+        var aeroDifference = 0;
         clearInterval(this.interval)
 
         workout.exercises.forEach(exercise => {
@@ -131,9 +137,25 @@ class WorkoutInProgress extends React.Component {
                         if(!set.weight.length) {
                             set.weight = 0
                         }
+                        const weight = exercises[workout.exercises.indexOf(exercise)].goals[exercise.sets.indexOf(set)].weight;
+                        if(set.weight !== 0 && weight !== 0) {
+                            if(set.weight > weight) {
+                                weightDifference++;
+                            } else if(set.weight < weight) {
+                                weightDifference--;
+                            } 
+                        }
                     }
                     if(!set.reps.length) {
                         set.reps = 0
+                    }
+                    const reps = exercises[workout.exercises.indexOf(exercise)].goals[exercise.sets.indexOf(set)].reps;
+                    if(set.reps !== 0 && reps !== 0) {
+                        if(set.reps > reps) {
+                            repDifference++;
+                        } else if(set.reps < reps) {
+                            repDifference--;
+                        } 
                     }
                 })
             } else {
@@ -142,16 +164,29 @@ class WorkoutInProgress extends React.Component {
                 }
                 if(!exercise.duration.length) {
                     exercise.duration = 0;
+                } else {
+                    const duration = exercises[workout.exercises.indexOf(exercise)].goals.duration;
+                    if(exercise.duration !== 0 && duration !== 0) {
+                        if(exercise.duration > duration) {
+                            aeroDifference++;
+                        } else if(exercise.duration < duration) {
+                            aeroDifference--;
+                        } 
+                    }
                 }
             }
         });
+        
         workout.date = new Date();
         workout.user = firestore.doc(`/users/${this.props.currentUser.id}`);
         workout.time = Math.floor((this.state.currentTime % (1000*60*60)) / (1000*60));
 
         this.setState(
             {
-                completed: true
+                completed: true,
+                repDifference: repDifference,
+                weightDifference: weightDifference,
+                aeroDifference: aeroDifference
             }, () => {
                 addDocumentToCollection('workouts', workout);
                 updateCurrentWorkoutTime(this.state.currentTime)
@@ -160,18 +195,26 @@ class WorkoutInProgress extends React.Component {
     }
 
     handleExerciseChange = (id, value) => {
-        const { exercises } = this.state.workout;
-        const index = exercises.indexOf(exercises.find(exercise => exercise.id === id));
-        id > 800 && id < 900 ? 
-        this.setState({
-            workout: update(this.state.workout, {exercises: {[index]: {[value.name]: {$set: value.value}}}})
-        }, () => this.props.updateCurrentWorkout(this.state.workout)) : this.setState({
-            workout: update(this.state.workout, {exercises: {[index]: {sets: {$set: value}}}})
-        }, () => this.props.updateCurrentWorkout(this.state.workout));
+        const { workout } = this.state;
+        const { exercises } = workout;
+        var type = ''
+        const index = exercises.indexOf(exercises.find(exercise => {type = exercise.type; return exercise.id === id;}));
+        if(type === 'aerobic') {
+            var exercise = exercises[index];
+            exercise.averageHeartRate = value.averageHeartRate;
+            exercise.duration = value.duration;
+            this.setState({
+                workout: update(workout, {exercises: {[index]: {$set: exercise}}})
+            })
+        } else {
+            this.setState({
+                workout: update(workout, {exercises: {[index]: {sets: {$set: value}}}})
+            });
+        }
     }
 
     render() {
-        const { workout, completed, currentTime, timerRunning } = this.state;
+        const { workout, completed, currentTime, timerRunning, weightDifference, repDifference, aeroDifference } = this.state;
         const hours = Math.floor((currentTime % (1000*60*60*24)) / (1000*60*60));
         const minutes = Math.floor((currentTime % (1000*60*60)) / (1000*60))
         const seconds = Math.floor((currentTime % (1000*60)) / 1000)
@@ -199,7 +242,40 @@ class WorkoutInProgress extends React.Component {
                     }} >BACK</CustomButton>
                 </div>
                 {
-                    completed ? <WorkoutCompleted workout={workout} /> : null
+                    completed ? 
+                    <div>
+                    {
+                        weightDifference !== 0 || repDifference !== 0 || aeroDifference !== 0 ? 
+                        <div className='review-popup'>
+                            <div className='review-popup-inner'>
+                                { 
+                                    weightDifference > 0 || repDifference > 0 || aeroDifference > 0 ? 
+                                    <div>
+                                        <h3>You exceeded your goals in some exercises!</h3>
+                                        <p>Do you wish to update the target goals for this template?</p>
+                                    </div>
+                                : 
+                                    <div>
+                                        <h3>You didn't manage to achieve your goals in some exercises!</h3>
+                                        <p>Do you wish to update the target goals for this template?</p>
+                                    </div>
+                                }
+                                <CustomButton onClick={() => this.setState({completed: true}, this.props.history.push(`/templates/${workout.workoutName}/goals`))}>YES</CustomButton>
+                                <CustomButton inverted onClick={() => this.setState({completed: true}, this.props.history.push('/templates'))}>NO</CustomButton>
+                            </div>
+                        </div> : 
+                        <div className='review-popup'>
+                            <div className='review-popup-inner'>
+                                <div>
+                                    <h3>Workout finished, well done</h3>
+                                    <p>Do you wish to update the target goals for this template?</p>
+                                </div>
+                                <CustomButton onClick={() => this.setState({completed: true}, this.props.history.push(`/templates/${workout.workoutName}/goals`))}>YES</CustomButton>
+                                <CustomButton inverted onClick={() => this.setState({completed: true}, this.props.history.push('/templates'))}>NO</CustomButton>
+                            </div>
+                        </div>
+                    }
+                    </div> : ''
                 }
             </div>
         )

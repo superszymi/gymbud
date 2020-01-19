@@ -47,7 +47,7 @@ class ExerciseAtlasPage extends React.Component {
             <div className='exercise-atlas'>
                 <Route exact path={`${match.path}`} render={(props) => <AtlasOverviewWithLoading isLoading={loading} {...props} />} />
                 <Switch>
-                    <Route exact path={`${match.path}/review-template`} render={props => <ReviewTemplateWithLoading currentUser={currentUser} {...props} /> } />
+                    <Route exact path={`${match.path}/review-template`} render={props => <ReviewTemplateWithLoading firstTime currentUser={currentUser} {...props} /> } />
                     <Route exact path={`${match.path}/:title`} render={(props) => <AtlasCategoryWithLoading isLoading={loading} {...props} />} />
                 </Switch>
                 </div>

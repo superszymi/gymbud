@@ -34,7 +34,9 @@ class WorkoutExercise extends React.Component {
         const { sets } = this.state;
         const { type } = this.props;
         sets ? sets.forEach(element => {
-            if(type === 'weighted' ? element.reps.length && element.weight.length : element.reps.length) {
+            if(type === 'weighted' && element.weight.length && element.reps.length) {
+                completed++;
+            } else if(type === 'bodyweight' && element.reps.length) {
                 completed++;
             }
         }) : completed = 0;
@@ -55,7 +57,7 @@ class WorkoutExercise extends React.Component {
     handleAerobicChange = (name, value) => {
         this.setState(
             update(this.state, {[name]: {$set: value}}), () => {
-                this.props.onChange(this.props.id, {name: name, value: value})
+                this.props.onChange(this.props.id, {averageHeartRate: this.state.averageHeartRate, duration: this.state.duration})
             }
         )
     }
