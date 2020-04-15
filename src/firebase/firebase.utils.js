@@ -2,15 +2,8 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
 
-const config = {
-    apiKey: "AIzaSyDflCBgvAKyAFLSIkRLk5qsSnf03YKtMO4",
-    authDomain: "gymbud-f0070.firebaseapp.com",
-    databaseURL: "https://gymbud-f0070.firebaseio.com",
-    projectId: "gymbud-f0070",
-    storageBucket: "gymbud-f0070.appspot.com",
-    messagingSenderId: "930682556594",
-    appId: "1:930682556594:web:cdc94bffa9532b43d579ab"
-  };
+/* config file containing user's firebase apikey */
+import config from './firebase.config';
 
   export const createUserProfileDocument = async (userAuth, otherData) => {
     if(!userAuth) return;
