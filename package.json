@@ -9,7 +9,7 @@
     "firebase": "^7.6.0",
     "firebase-tools": "^7.11.0",
     "immutability-helper": "^3.0.1",
-    "node-sass": "^4.13.0",
+    "node-sass": "^7.0.0",
     "react": "^16.12.0",
     "react-addons": "^0.9.1-deprecated",
     "react-app-rewire-workbox": "^2.0.1",
